@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Select Seats - Flight Booking System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #172033;
+            background-image:
+            
+            linear-gradient(
+            rgba(4, 35, 75, 0.48),
+            rgba(4, 35, 75, 0.48)
+            ),
+            url("/static/image/Flights.jpeg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        nav {
+            background: #2563eb;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;;
+        }
+
+        .nav-title {
+            font-size: 15px;
+            color: #64748b;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .container {
+            width: 92%;
+            max-width: 1100px;
+            margin: 35px auto;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            color: white;
+            margin-bottom: 8px;
+            font-size: 32px;
+        }
+
+        .page-header p {
+            color: #90b6ec;
+        }
+
+        /* =========================
+           FLIGHT INFO
+        ========================= */
+
+        .flight-card {
+            background: white;
+            border-radius: 18px;
+            padding: 22px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+        }
+
+        .flight-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .airline {
+            font-size: 20px;
+            font-weight: bold;
+            color: #123b70;
+        }
+
+        .flight-number {
+            color: #64748b;
+            margin-top: 5px;
+        }
+
+        .route {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .route-arrow {
+            color: #1769e0;
+            font-size: 28px;
+        }
+
+        /* =========================
+           LEGEND
+        ========================= */
+
+        .legend {
+            background: white;
+            border-radius: 15px;
+            padding: 18px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.05);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #475569;
+        }
+
+        .legend-box {
+            width: 25px;
+            height: 25px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+        }
+
+        .legend-available {
+            background: #e8f7ee;
+            border-color: #39a96b;
+        }
+
+        .legend-selected {
+            background: #1769e0;
+            border-color: #1769e0;
+        }
+
+        .legend-booked {
+            background: #e5e7eb;
+            border-color: #cbd5e1;
+        }
+
+        /* =========================
+           AIRCRAFT
+        ========================= */
+
+        .aircraft {
+            background: white;
+            border-radius: 30px;
+            padding: 35px 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            max-width: 650px;
+            margin: auto;
+        }
+
+        .cockpit {
+            width: 180px;
+            height: 55px;
+            margin: 0 auto 30px;
+            border-radius: 90px 90px 20px 20px;
+            background: #e8eef7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #64748b;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .seat-grid {
+            display: grid;
+            grid-template-columns: 35px 52px 52px 52px 28px 52px 52px 52px;
+            column-gap: 8px;
+            row-gap: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .column-label {
+            text-align: center;
+            font-weight: bold;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .row-number {
+            text-align: center;
+            font-weight: bold;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .aisle {
+            width: 25px;
+        }
+
+        .seat {
+            width: 45px;
+            height: 45px;
+            border-radius: 9px 9px 5px 5px;
+            border: 2px solid #39a96b;
+            background: #e8f7ee;
+            color: #166534;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .seat:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+        }
+
+        .seat.selected {
+            background: #1769e0;
+            border-color: #1769e0;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(23, 105, 224, 0.35);
+        }
+
+        .seat.booked {
+            background: #e5e7eb;
+            border-color: #cbd5e1;
+            color: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        /* =========================
+           SELECTION SUMMARY
+        ========================= */
+
+        .selection-card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            margin-top: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+        }
+
+        .selection-title {
+            font-size: 19px;
+            font-weight: bold;
+            color: #123b70;
+            margin-bottom: 15px;
+        }
+
+        .selection-count {
+            background: #eef5ff;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            color: #1769e0;
+            font-weight: bold;
+        }
+
+        .selected-seats {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            min-height: 35px;
+        }
+
+        .selected-seat-tag {
+            background: #1769e0;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .no-seat {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        /* =========================
+           BUTTON
+        ========================= */
+
+        .continue-btn {
+            width: 100%;
+            margin-top: 22px;
+            border: none;
+            border-radius: 12px;
+            padding: 15px;
+            background: #1769e0;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .continue-btn:hover:not(:disabled) {
+            background: #1256bd;
+            transform: translateY(-1px);
+        }
+
+        .continue-btn:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+        }
+
+        .message {
+            text-align: center;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .loading {
+            background: #eef5ff;
+            color: #1769e0;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 600px) {
+
+            nav {
+                padding: 0 20px;
+            }
+
+            .nav-title {
+                display: none;
+            }
+
+            .page-header h1 {
+                font-size: 25px;
+            }
+
+            .aircraft {
+                padding: 25px 8px;
+                overflow-x: auto;
+            }
+
+            .seat-grid {
+                grid-template-columns:
+                    38px 38px 38px
+                    18px
+                    38px 38px 38px;
+
+                gap: 7px;
+            }
+
+            .seat {
+                width: 38px;
+                height: 38px;
+                font-size: 10px;
+            }
+
+            .cockpit {
+                width: 140px;
+            }
+
+            .route {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <div class="logo">✈️ SkyBook</div>
+</nav>
+
+
+<div class="container">
+
+    <div class="page-header">
+        <h1>Select Your Seats</h1>
+        <p>Select up to 4 seats for your booking</p>
+    </div>
+
+
+    <!-- ERROR / LOADING -->
+    <div id="message" class="message"></div>
+
+
+    <!-- FLIGHT INFORMATION -->
+    <div class="flight-card">
+
+        <div class="flight-header">
+
+            <div>
+                <div id="airline" class="airline">
+                    Loading...
+                </div>
+
+                <div id="flightNumber" class="flight-number">
+                    Flight
+                </div>
+            </div>
+
+            <div class="route">
+
+                <span id="source">
+                    ---
+                </span>
+
+                <span class="route-arrow">
+                    →
+                </span>
+
+                <span id="destination">
+                    ---
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- LEGEND -->
+    <div class="legend">
+
+        <div class="legend-item">
+            <div class="legend-box legend-available"></div>
+            Available
+        </div>
+
+        <div class="legend-item">
+            <div class="legend-box legend-selected"></div>
+            Selected
+        </div>
+
+        <div class="legend-item">
+            <div class="legend-box legend-booked"></div>
+            Booked
+        </div>
+
+    </div>
+
+
+    <!-- AIRCRAFT -->
+    <div class="aircraft">
+
+        <div class="cockpit">
+            ✈️ COCKPIT
+        </div>
+
+        <div id="seatGrid" class="seat-grid">
+
+            <!-- Seats generated by JavaScript -->
+
+        </div>
+
+    </div>
+
+
+    <!-- SELECTION -->
+    <div class="selection-card">
+
+        <div class="selection-title">
+            Your Seat Selection
+        </div>
+
+        <div id="selectionCount" class="selection-count">
+            0 / 4 seats selected
+        </div>
+
+        <div id="selectedSeats" class="selected-seats">
+
+            <span class="no-seat">
+                No seats selected
+            </span>
+
+        </div>
+
+        <button
+            id="continueBtn"
+            class="continue-btn"
+            disabled
+        >
+            Continue to Passenger Details →
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    // ==========================================
+    // CONFIGURATION
+    // ==========================================
+
+    const FLIGHT_SERVICE_URL = "http://localhost:5001";
+    const SEAT_SERVICE_URL = "http://localhost:5002";
+
+    const MAX_SEATS = 4;
+
+
+    // ==========================================
+    // VARIABLES
+    // ==========================================
+
+    let flightId = null;
+
+    let selectedSeats = [];
+
+    let seatsData = [];
+
+
+    // ==========================================
+    // GET FLIGHT ID
+    // ==========================================
+
+    function getFlightId() {
+
+        flightId = localStorage.getItem("flightId");
+
+        if (!flightId) {
+
+            showMessage(
+                "Flight information not found. Please select a flight again.",
+                "error"
+            );
+
+            return false;
+        }
+
+        return true;
+    }
+
+
+    // ==========================================
+    // MESSAGE
+    // ==========================================
+
+    function showMessage(text, type) {
+
+        const message = document.getElementById("message");
+
+        message.textContent = text;
+
+        message.className = "message " + type;
+
+        message.style.display = "block";
+    }
+
+
+    function hideMessage() {
+
+        const message = document.getElementById("message");
+
+        message.style.display = "none";
+    }
+
+
+    // ==========================================
+    // LOAD FLIGHT
+    // ==========================================
+
+    async function loadFlight() {
+
+        try {
+
+            const response = await fetch(
+                `${FLIGHT_SERVICE_URL}/flights/${flightId}`
+            );
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to load flight information"
+                );
+            }
+
+            const result = await response.json();
+
+            console.log("Flight result:", result);
+
+            const flight = result.flight || result;
+
+            document.getElementById("airline").textContent =
+                flight.airline || "Airline";
+
+            document.getElementById("flightNumber").textContent =
+                flight.flight_number
+                    ? `Flight ${flight.flight_number}`
+                    : `Flight ID: ${flightId}`;
+
+            document.getElementById("source").textContent =
+                flight.source || "---";
+
+            document.getElementById("destination").textContent =
+                flight.destination || "---";
+
+        } catch (error) {
+
+            console.error("Flight loading error:", error);
+
+            showMessage(
+                "Unable to load flight information.",
+                "error"
+            );
+        }
+    }
+
+
+    // ==========================================
+    // LOAD SEATS
+    // ==========================================
+
+    async function loadSeats() {
+
+        try {
+
+            showMessage(
+                "Loading available seats...",
+                "loading"
+            );
+
+            const response = await fetch(
+                `${SEAT_SERVICE_URL}/seats/${flightId}`
+            );
+
+            if (!response.ok) {
+
+                throw new Error(
+                    `Seat service returned ${response.status}`
+                );
+            }
+
+            const result = await response.json();
+            
+            console.log("Seat API response:", result);
+            
+            // Seat Service returns a direct array
+            
+            if (Array.isArray(result)) {
+                seatsData = result;
+            }
+            
+            // Also support object response { seats: [...] }
+            else if (result && Array.isArray(result.seats)) {
+                seatsData = result.seats;
+            }
+            
+            else {
+                seatsData = [];
+            }
+            
+            console.log("Total seats received:", seatsData.length);
+
+            if (seatsData.length === 0){
+                showMessage(
+                    "No seats are available for this flight.",
+                    "error");
+                    return
+            }
+            
+            hideMessage();
+            
+            renderSeats();
+
+        } catch (error) {
+
+            console.error("Seat loading error:", error);
+
+            showMessage(
+                "Unable to load seats. Please make sure Seat Service is running on port 5002.",
+                "error"
+            );
+        }
+    }
+
+
+    // ==========================================
+    // RENDER SEATS
+    // ==========================================
+
+    function renderSeats() {
+
+        const seatGrid =
+            document.getElementById("seatGrid");
+
+        seatGrid.innerHTML = "";
+
+
+        // Column headers
+
+        seatGrid.appendChild(
+            createLabel("")
+        );
+
+        ["A", "B", "C"].forEach(letter => {
+
+            seatGrid.appendChild(
+                createLabel(letter)
+            );
+
+        });
+
+        seatGrid.appendChild(
+            createLabel("")
+        );
+
+        ["D", "E", "F"].forEach(letter => {
+
+            seatGrid.appendChild(
+                createLabel(letter)
+            );
+
+        });
+
+
+        // If API returns no seats
+        if (!seatsData.length) {
+
+            showMessage(
+                "No seats are available for this flight.",
+                "error"
+            );
+
+            return;
+        }
+
+
+        // Sort seats naturally
+        seatsData.sort((a, b) => {
+
+            const numA =
+                parseInt(
+                    String(a.seat_number).replace(/\D/g, "")
+                );
+
+            const numB =
+                parseInt(
+                    String(b.seat_number).replace(/\D/g, "")
+                );
+
+            return numA - numB;
+
+        });
+
+
+        // Group seats by row
+        const rows = {};
+
+        seatsData.forEach(seat => {
+
+            const seatNumber =
+                String(seat.seat_number);
+
+            const row =
+                parseInt(
+                    seatNumber.replace(/\D/g, "")
+                );
+
+            if (!rows[row]) {
+                rows[row] = {};
+            }
+
+            const column =
+                seatNumber.replace(/[0-9]/g, "");
+
+            rows[row][column] = seat;
+
+        });
+
+
+        Object.keys(rows)
+            .sort((a, b) => Number(a) - Number(b))
+            .forEach(row => {
+
+                // Row number
+                const rowLabel =
+                    createLabel(row);
+
+                rowLabel.classList.add("row-number");
+
+                seatGrid.appendChild(rowLabel);
+
+
+                // A B C
+                ["A", "B", "C"].forEach(letter => {
+
+                    const seat = rows[row][letter];
+
+                    if (seat) {
+
+                        seatGrid.appendChild(
+                            createSeatButton(seat)
+                        );
+
+                    } else {
+
+                        seatGrid.appendChild(
+                            createEmptySeat()
+                        );
+
+                    }
+
+                });
+
+
+                // Aisle
+                const aisle =
+                    document.createElement("div");
+
+                aisle.className = "aisle";
+
+                seatGrid.appendChild(aisle);
+
+
+                // D E F
+                ["D", "E", "F"].forEach(letter => {
+
+                    const seat = rows[row][letter];
+
+                    if (seat) {
+
+                        seatGrid.appendChild(
+                            createSeatButton(seat)
+                        );
+
+                    } else {
+
+                        seatGrid.appendChild(
+                            createEmptySeat()
+                        );
+
+                    }
+
+                });
+
+            });
+
+    }
+
+
+    // ==========================================
+    // LABEL
+    // ==========================================
+
+    function createLabel(text) {
+
+        const element =
+            document.createElement("div");
+
+        element.className = "column-label";
+
+        element.textContent = text;
+
+        return element;
+    }
+
+
+    // ==========================================
+    // EMPTY SEAT
+    // ==========================================
+
+    function createEmptySeat() {
+
+        const empty =
+            document.createElement("div");
+
+        empty.style.width = "45px";
+        empty.style.height = "45px";
+
+        return empty;
+    }
+
+
+    // ==========================================
+    // CREATE SEAT BUTTON
+    // ==========================================
+
+    function createSeatButton(seat) {
+
+        const button =
+            document.createElement("button");
+
+        const seatNumber =
+            String(seat.seat_number);
+
+        const status =
+            String(seat.status || "Available")
+                .toLowerCase();
+
+
+        button.textContent = seatNumber;
+
+        button.className = "seat";
+
+
+        // BOOKED
+        if (status === "booked") {
+
+            button.classList.add("booked");
+
+            button.disabled = true;
+
+            return button;
+        }
+
+
+        // SELECTED
+        if (selectedSeats.includes(seatNumber)) {
+
+            button.classList.add("selected");
+
+        }
+
+
+        // CLICK
+        button.addEventListener(
+            "click",
+            () => selectSeat(seatNumber)
+        );
+
+
+        return button;
+    }
+
+
+    // ==========================================
+    // SELECT / UNSELECT SEAT
+    // ==========================================
+
+    function selectSeat(seatNumber) {
+
+        const index =
+            selectedSeats.indexOf(seatNumber);
+
+
+        // UNSELECT
+        if (index !== -1) {
+
+            selectedSeats.splice(index, 1);
+
+        }
+
+        // SELECT
+        else {
+
+            if (selectedSeats.length >= MAX_SEATS) {
+
+                alert(
+                    "You can book a maximum of 4 seats at one time."
+                );
+
+                return;
+            }
+
+            selectedSeats.push(seatNumber);
+        }
+
+
+        console.log(
+            "Selected seats:",
+            selectedSeats
+        );
+
+
+        renderSeats();
+
+        updateSelection();
+    }
+
+
+    // ==========================================
+    // UPDATE SELECTION
+    // ==========================================
+
+    function updateSelection() {
+
+        const count =
+            document.getElementById("selectionCount");
+
+        const selectedContainer =
+            document.getElementById("selectedSeats");
+
+        const continueBtn =
+            document.getElementById("continueBtn");
+
+
+        count.textContent =
+            `${selectedSeats.length} / ${MAX_SEATS} seats selected`;
+
+
+        selectedContainer.innerHTML = "";
+
+
+        if (selectedSeats.length === 0) {
+
+            const empty =
+                document.createElement("span");
+
+            empty.className = "no-seat";
+
+            empty.textContent =
+                "No seats selected";
+
+            selectedContainer.appendChild(empty);
+
+        } else {
+
+            selectedSeats.forEach(seat => {
+
+                const tag =
+                    document.createElement("span");
+
+                tag.className =
+                    "selected-seat-tag";
+
+                tag.textContent =
+                    `Seat ${seat}`;
+
+                selectedContainer.appendChild(tag);
+
+            });
+
+        }
+
+
+        continueBtn.disabled =
+            selectedSeats.length === 0;
+    }
+
+
+    // ==========================================
+    // CONTINUE
+    // ==========================================
+
+    document
+        .getElementById("continueBtn")
+        .addEventListener("click", function () {
+
+            if (selectedSeats.length === 0) {
+
+                alert(
+                    "Please select at least one seat."
+                );
+
+                return;
+            }
+
+
+            if (selectedSeats.length > MAX_SEATS) {
+
+                alert(
+                    "Maximum 4 seats are allowed."
+                );
+
+                return;
+            }
+
+
+            // Save all selected seats
+            localStorage.setItem(
+                "selectedSeats",
+                JSON.stringify(selectedSeats)
+            );
+
+
+            // Backward compatibility
+            // Existing payment/baggage pages
+            // can still access first seat if needed.
+            localStorage.setItem(
+                "seatNumber",
+                selectedSeats[0]
+            );
+
+
+            console.log(
+                "Seats saved:",
+                selectedSeats
+            );
+
+
+            // Go to passenger details
+            window.location.href =
+                "passenger.html";
+
+        });
+
+
+    // ==========================================
+    // INITIALIZE
+    // ==========================================
+
+    async function initializePage() {
+
+        if (!getFlightId()) {
+            return;
+        }
+
+
+        // Clear old passenger data
+        localStorage.removeItem("passengers");
+
+
+        await loadFlight();
+
+        await loadSeats();
+
+        updateSelection();
+
+    }
+
+
+    initializePage();
+
+</script>
+
+</body>
+</html>

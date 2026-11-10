@@ -1,0 +1,2446 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Payment - SkyBook</title>
+
+    <!-- Braintree JavaScript SDK -->
+    <script src="https://js.braintreegateway.com/web/3.145.0/js/client.min.js"></script>
+    <script src="https://js.braintreegateway.com/web/3.145.0/js/hosted-fields.min.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+         body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #172033;
+            
+            background-image:
+            linear-gradient(
+            rgba(4, 35, 75, 0.45),
+            rgba(4, 35, 75, 0.45)
+            ),
+            url("/static/image/payment.jpeg");
+            
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .navbar {
+            height: 80px;
+            background: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #172033;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .nav-links a:hover {
+            color: #2563eb;
+        }
+
+        /* ================= PAGE ================= */
+
+        .page {
+            max-width: 1050px;
+            margin: 45px auto;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            font-size: 40px;
+            margin-bottom: 8px;
+            text-align: center;
+            color: white;
+        }
+
+        .subtitle {
+            color: #42495a;
+            font-size: 17px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* ================= CARD ================= */
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+            margin-bottom: 25px;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            margin-bottom: 22px;
+        }
+
+        /* ================= FLIGHT INFO ================= */
+
+        .booking-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .info-box {
+            background: #f8fafc;
+            padding: 17px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .info-label {
+            color: #667085;
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
+
+        .info-value {
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        /* ================= PASSENGERS ================= */
+
+        .passenger-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .passenger-card {
+            border: 1px solid #dbe3ef;
+            border-radius: 15px;
+            padding: 20px;
+            background: #f8fafc;
+        }
+
+        .passenger-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .passenger-number {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .seat-badge {
+            background: #dbeafe;
+            color: #1d4ed8;
+            padding: 7px 13px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .passenger-details {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .detail {
+            background: white;
+            border-radius: 10px;
+            padding: 12px;
+        }
+
+        .detail-label {
+            color: #667085;
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        .detail-value {
+            font-weight: bold;
+        }
+
+        /* ================= BAGGAGE ================= */
+
+        .baggage-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .baggage-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 15px 18px;
+        }
+
+        .baggage-name {
+            font-weight: bold;
+        }
+
+        .baggage-description {
+            color: #667085;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .baggage-cost {
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        /* ================= PRICE ================= */
+
+        .price-section {
+            margin-top: 10px;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 17px;
+        }
+
+        .price-row.total {
+            border-bottom: none;
+            font-size: 25px;
+            font-weight: bold;
+            color: #2563eb;
+            margin-top: 8px;
+        }
+
+        /* ================= PAYMENT ================= */
+
+        .payment-method {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 2px solid #2563eb;
+            background: #eff6ff;
+            padding: 20px;
+            border-radius: 14px;
+            margin-bottom: 25px;
+        }
+
+        .payment-icon {
+            font-size: 38px;
+        }
+
+        .payment-method h3 {
+            margin: 0 0 5px 0;
+        }
+
+        .payment-method p {
+            margin: 0;
+            color: #667085;
+        }
+
+        .payment-form {
+            margin-top: 25px;
+        }
+
+        .field-group {
+            margin-bottom: 20px;
+        }
+
+        .field-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .field-label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #344054;
+        }
+
+        .hosted-field {
+            height: 52px;
+            border: 1px solid #d0d5dd;
+            border-radius: 10px;
+            background: white;
+            padding: 15px;
+            transition: 0.2s;
+        }
+
+        .hosted-field:focus-within {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        .field-error {
+            color: #dc2626;
+            font-size: 13px;
+            margin-top: 6px;
+        }
+
+        .secure-message {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 18px;
+            color: #667085;
+            font-size: 14px;
+        }
+
+        /* ================= BUTTON ================= */
+
+        .payment-section {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .pay-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 16px 60px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .pay-btn:hover:not(:disabled) {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        .pay-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ================= LOADING ================= */
+
+        .loading {
+            text-align: center;
+            padding: 30px;
+            font-size: 17px;
+            color: #667085;
+        }
+
+        /* ================= ERROR ================= */
+
+        .error-box {
+            background: #fff1f2;
+            border: 1px solid #fecdd3;
+            color: #be123c;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        /* ================= SUCCESS ================= */
+
+        .success-box {
+            background: #ecfdf3;
+            border: 1px solid #a7f3d0;
+            color: #047857;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .success-icon {
+            font-size: 55px;
+            margin-bottom: 10px;
+        }
+
+        .payment-id {
+            background: white;
+            display: inline-block;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-weight: bold;
+            color: #172033;
+        }
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 700px) {
+
+            .navbar {
+                padding: 0 20px;
+            }
+
+            .logo {
+                font-size: 23px;
+            }
+
+            .nav-links {
+                gap: 12px;
+            }
+
+            .nav-links a {
+                font-size: 13px;
+            }
+
+            .page-title {
+                font-size: 32px;
+            }
+
+            .booking-info {
+                grid-template-columns: 1fr;
+            }
+
+            .passenger-details {
+                grid-template-columns: 1fr;
+            }
+
+            .field-row {
+                grid-template-columns: 1fr;
+            }
+
+            .baggage-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            ✈️ SkyBook
+        </div>
+
+    </nav>
+
+
+    <!-- ================= PAGE ================= -->
+
+    <div class="page">
+
+        <h1 class="page-title">
+            Secure Payment
+        </h1>
+
+        <p class="subtitle">
+            Review all passengers, baggage and complete your secure payment.
+        </p>
+
+
+        <!-- ================= BOOKING SUMMARY ================= -->
+
+        <div class="card">
+
+            <h2>
+                ✈️ Flight Summary
+            </h2>
+
+            <div id="bookingInfo" class="booking-info">
+
+                <div class="loading">
+                    Loading flight information...
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= PASSENGERS ================= -->
+
+        <div class="card">
+
+            <h2>
+                👥 Passenger Details
+            </h2>
+
+            <div id="passengerList" class="passenger-list">
+
+                <div class="loading">
+                    Loading passengers...
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= BAGGAGE ================= -->
+
+        <div class="card">
+
+            <h2>
+                🧳 Baggage Details
+            </h2>
+
+            <div id="baggageList" class="baggage-list">
+
+                <div class="loading">
+                    Loading baggage...
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= PRICE ================= -->
+
+        <div class="card">
+
+            <h2>
+                💰 Price Summary
+            </h2>
+
+            <div class="price-section">
+
+                <div class="price-row">
+
+                    <span>
+                        Flight Fare
+                    </span>
+
+                    <strong id="flightPrice">
+                        ₹0
+                    </strong>
+
+                </div>
+
+
+                <div class="price-row">
+
+                    <span>
+                        Passengers
+                    </span>
+
+                    <strong id="passengerCount">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="price-row">
+
+                    <span>
+                        Baggage
+                    </span>
+
+                    <strong id="baggagePrice">
+                        ₹0
+                    </strong>
+
+                </div>
+
+
+                <div class="price-row total">
+
+                    <span>
+                        Total Amount
+                    </span>
+
+                    <strong id="totalAmount">
+                        ₹0
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= PAYMENT ================= -->
+
+        <div class="card">
+
+            <h2>
+                💳 Payment
+            </h2>
+
+
+            <div class="payment-method">
+
+                <div class="payment-icon">
+                    🔐
+                </div>
+
+                <div>
+
+                    <h3>
+                        Secure Card Payment
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <!-- CARD NUMBER -->
+
+            <div class="payment-form">
+
+                <div class="field-group">
+
+                    <label class="field-label">
+                        Card Number
+                    </label>
+
+                    <div
+                        id="card-number"
+                        class="hosted-field">
+                    </div>
+
+                    <div
+                        id="card-number-error"
+                        class="field-error">
+                    </div>
+
+                </div>
+
+
+                <!-- EXPIRATION + CVV -->
+
+                <div class="field-row">
+
+                    <div class="field-group">
+
+                        <label class="field-label">
+                            Expiration Date
+                        </label>
+
+                        <div
+                            id="expiration-date"
+                            class="hosted-field">
+                        </div>
+
+                        <div
+                            id="expiration-error"
+                            class="field-error">
+                        </div>
+
+                    </div>
+
+
+                    <div class="field-group">
+
+                        <label class="field-label">
+                            CVV
+                        </label>
+
+                        <div
+                            id="cvv"
+                            class="hosted-field">
+                        </div>
+
+                        <div
+                            id="cvv-error"
+                            class="field-error">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="secure-message">
+
+                    🔒
+
+                    <span>
+                        Secure payment 
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- PAY BUTTON -->
+
+            <div class="payment-section">
+
+                <button
+                    id="payBtn"
+                    class="pay-btn"
+                    type="button"
+                    disabled>
+
+                    Loading Secure Payment...
+
+                </button>
+
+            </div>
+
+
+            <div id="message"></div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        /* =========================================================
+           SERVICE URLS
+        ========================================================= */
+
+        const FLIGHT_SERVICE_URL =
+            "http://localhost:5001";
+
+        const PAYMENT_SERVICE_URL =
+            "http://localhost:5004";
+
+        const TICKET_SERVICE_URL =
+            "http://localhost:5005";
+
+
+        /* =========================================================
+           LOCAL STORAGE
+        ========================================================= */
+
+        const flightId =
+            localStorage.getItem("flightId");
+
+
+        let selectedSeats = [];
+
+        let passengers = [];
+
+        let passengerBaggage = [];
+
+
+        /* =========================================================
+           READ SELECTED SEATS
+        ========================================================= */
+
+        try {
+
+            const storedSeats =
+                localStorage.getItem("selectedSeats");
+
+            if (storedSeats) {
+
+                selectedSeats =
+                    JSON.parse(storedSeats);
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Selected seats parsing error:",
+                error
+            );
+
+            selectedSeats = [];
+
+        }
+
+
+        /* =========================================================
+           READ PASSENGERS
+        ========================================================= */
+
+        try {
+
+            const storedPassengers =
+                localStorage.getItem("passengers");
+
+            if (storedPassengers) {
+
+                passengers =
+                    JSON.parse(storedPassengers);
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Passengers parsing error:",
+                error
+            );
+
+            passengers = [];
+
+        }
+
+
+        /* =========================================================
+           READ BAGGAGE
+        ========================================================= */
+
+        try {
+
+            const storedBaggage =
+                localStorage.getItem("passengerBaggage");
+
+            if (storedBaggage) {
+
+                passengerBaggage =
+                    JSON.parse(storedBaggage);
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Baggage parsing error:",
+                error
+            );
+
+            passengerBaggage = [];
+
+        }
+
+
+        /* =========================================================
+           GLOBAL VARIABLES
+        ========================================================= */
+
+        let flight = null;
+
+        let flightTotal = 0;
+
+        let baggageTotal = 0;
+
+        let totalAmount = 0;
+
+        let hostedFieldsInstance = null;
+
+
+        /* =========================================================
+           DOM
+        ========================================================= */
+
+        const bookingInfo =
+            document.getElementById("bookingInfo");
+
+        const passengerList =
+            document.getElementById("passengerList");
+
+        const baggageList =
+            document.getElementById("baggageList");
+
+        const payBtn =
+            document.getElementById("payBtn");
+
+        const message =
+            document.getElementById("message");
+
+
+        /* =========================================================
+           DEBUG
+        ========================================================= */
+
+        console.log("==============================");
+        console.log("SKYBOOK PAYMENT PAGE");
+        console.log("Flight ID:", flightId);
+        console.log("Selected Seats:", selectedSeats);
+        console.log("Passengers:", passengers);
+        console.log("Passenger Baggage:", passengerBaggage);
+        console.log("==============================");
+
+
+        /* =========================================================
+           VALIDATE BOOKING DATA
+        ========================================================= */
+
+        function validateBookingData() {
+
+            if (!flightId) {
+
+                throw new Error(
+                    "Flight ID is missing."
+                );
+
+            }
+
+
+            if (
+                !Array.isArray(selectedSeats) ||
+                selectedSeats.length === 0
+            ) {
+
+                throw new Error(
+                    "No seats have been selected."
+                );
+
+            }
+
+
+            if (selectedSeats.length > 4) {
+
+                throw new Error(
+                    "Maximum 4 passengers are allowed."
+                );
+
+            }
+
+
+            if (
+                !Array.isArray(passengers) ||
+                passengers.length !== selectedSeats.length
+            ) {
+
+                throw new Error(
+                    "Passenger information does not match selected seats."
+                );
+
+            }
+
+        }
+
+
+        /* =========================================================
+           LOAD FLIGHT
+        ========================================================= */
+
+        async function loadFlight() {
+
+            try {
+
+                validateBookingData();
+
+
+                const response =
+                    await fetch(
+                        `${FLIGHT_SERVICE_URL}/flights/${encodeURIComponent(flightId)}`
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        `Flight Service returned ${response.status}`
+                    );
+
+                }
+
+
+                const result =
+                    await response.json();
+
+
+                console.log(
+                    "Flight result:",
+                    result
+                );
+
+
+                flight =
+                    result.flight ||
+                    result;
+
+
+                if (!flight) {
+
+                    throw new Error(
+                        "Flight not found."
+                    );
+
+                }
+
+
+                /* ================= FLIGHT INFO ================= */
+
+                bookingInfo.innerHTML = `
+
+                    <div class="info-box">
+
+                        <div class="info-label">
+                            Airline
+                        </div>
+
+                        <div class="info-value">
+                            ✈️ ${flight.airline || "N/A"}
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <div class="info-label">
+                            Flight Number
+                        </div>
+
+                        <div class="info-value">
+                            ${flight.flight_number || "N/A"}
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <div class="info-label">
+                            Route
+                        </div>
+
+                        <div class="info-value">
+                            ${flight.source || "N/A"}
+                            →
+                            ${flight.destination || "N/A"}
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <div class="info-label">
+                            Date
+                        </div>
+
+                        <div class="info-value">
+                            ${flight.date || "N/A"}
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <div class="info-label">
+                            Departure
+                        </div>
+
+                        <div class="info-value">
+                            ${
+                                flight.departure_time ||
+                                flight.departure ||
+                                "N/A"
+                            }
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <div class="info-label">
+                            Arrival
+                        </div>
+
+                        <div class="info-value">
+                            ${
+                                flight.arrival_time ||
+                                flight.arrival ||
+                                "N/A"
+                            }
+                        </div>
+
+                    </div>
+
+                `;
+
+
+                /* =================================================
+                   CALCULATE FLIGHT FARE
+                ================================================= */
+
+                const pricePerPassenger =
+                    Number(flight.price || 0);
+
+
+                flightTotal =
+                    pricePerPassenger *
+                    passengers.length;
+
+
+                /* =================================================
+                   BAGGAGE TOTAL
+                ================================================= */
+
+                baggageTotal =
+                    passengerBaggage.reduce(
+                        function (total, baggage) {
+
+                            return total +
+                                Number(
+                                    baggage.price || 0
+                                );
+
+                        },
+                        0
+                    );
+
+
+                totalAmount =
+                    flightTotal +
+                    baggageTotal;
+
+
+                document.getElementById(
+                    "flightPrice"
+                ).textContent =
+                    `₹${flightTotal.toLocaleString("en-IN")}`;
+
+
+                document.getElementById(
+                    "passengerCount"
+                ).textContent =
+                    passengers.length;
+
+
+                document.getElementById(
+                    "baggagePrice"
+                ).textContent =
+                    `₹${baggageTotal.toLocaleString("en-IN")}`;
+
+
+                document.getElementById(
+                    "totalAmount"
+                ).textContent =
+                    `₹${totalAmount.toLocaleString("en-IN")}`;
+
+
+            } catch (error) {
+
+                console.error(
+                    "Flight loading error:",
+                    error
+                );
+
+
+                bookingInfo.innerHTML = `
+
+                    <div class="error-box">
+
+                        ⚠️ Unable to load booking information.
+
+                        <br><br>
+
+                        ${error.message}
+
+                        <br><br>
+
+                        Make sure Flight Service is running
+                        on port 5001.
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+
+        /* =========================================================
+           DISPLAY PASSENGERS
+        ========================================================= */
+
+        function displayPassengers() {
+
+            if (
+                !Array.isArray(passengers) ||
+                passengers.length === 0
+            ) {
+
+                passengerList.innerHTML = `
+
+                    <div class="error-box">
+
+                        ⚠️ No passenger information found.
+
+                        <br><br>
+
+                        Please go back and enter passenger details.
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            passengerList.innerHTML = "";
+
+
+            passengers.forEach(
+                function (passenger, index) {
+
+                    const seat =
+                        selectedSeats[index] ||
+                        passenger.seat_number ||
+                        passenger.seat ||
+                        "N/A";
+
+
+                    const name =
+                        passenger.name ||
+                        passenger.passenger_name ||
+                        "Passenger";
+
+
+                    const age =
+                        passenger.age ||
+                        "N/A";
+
+
+                    const gender =
+                        passenger.gender ||
+                        "N/A";
+
+
+                    const card =
+                        document.createElement("div");
+
+
+                    card.className =
+                        "passenger-card";
+
+
+                    card.innerHTML = `
+
+                        <div class="passenger-header">
+
+                            <div class="passenger-number">
+
+                                Passenger ${index + 1}
+
+                            </div>
+
+                            <div class="seat-badge">
+
+                                💺 Seat ${seat}
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="passenger-details">
+
+                            <div class="detail">
+
+                                <div class="detail-label">
+                                    Name
+                                </div>
+
+                                <div class="detail-value">
+                                    ${name}
+                                </div>
+
+                            </div>
+
+
+                            <div class="detail">
+
+                                <div class="detail-label">
+                                    Age
+                                </div>
+
+                                <div class="detail-value">
+                                    ${age}
+                                </div>
+
+                            </div>
+
+
+                            <div class="detail">
+
+                                <div class="detail-label">
+                                    Gender
+                                </div>
+
+                                <div class="detail-value">
+                                    ${gender}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+
+                    passengerList.appendChild(card);
+
+                }
+            );
+
+        }
+
+
+        /* =========================================================
+           DISPLAY BAGGAGE
+        ========================================================= */
+
+        function displayBaggage() {
+
+            if (
+                !Array.isArray(passengerBaggage) ||
+                passengerBaggage.length === 0
+            ) {
+
+                baggageList.innerHTML = `
+
+                    <div class="baggage-card">
+
+                        <div>
+
+                            <div class="baggage-name">
+                                No Baggage
+                            </div>
+
+                            <div class="baggage-description">
+                                No additional baggage selected.
+                            </div>
+
+                        </div>
+
+                        <div class="baggage-cost">
+                            ₹0
+                        </div>
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            baggageList.innerHTML = "";
+
+
+            passengerBaggage.forEach(
+                function (baggage, index) {
+
+                    const passenger =
+                        passengers[index] || {};
+
+
+                    const passengerName =
+                        baggage.passenger_name ||
+                        passenger.name ||
+                        `Passenger ${index + 1}`;
+
+
+                    const seat =
+                        baggage.seat_number ||
+                        selectedSeats[index] ||
+                        "N/A";
+
+
+                    const baggageType =
+                        baggage.baggage_type ||
+                        baggage.type ||
+                        "Baggage";
+
+
+                    const weight =
+                        baggage.weight ||
+                        0;
+
+
+                    const price =
+                        Number(
+                            baggage.price || 0
+                        );
+
+
+                    const card =
+                        document.createElement("div");
+
+
+                    card.className =
+                        "baggage-card";
+
+
+                    card.innerHTML = `
+
+                        <div>
+
+                            <div class="baggage-name">
+
+                                🧳 ${passengerName}
+
+                            </div>
+
+                            <div class="baggage-description">
+
+                                Seat ${seat}
+                                •
+                                ${baggageType}
+                                ${
+                                    weight
+                                        ? ` • ${weight} KG`
+                                        : ""
+                                }
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="baggage-cost">
+
+                            ₹${price.toLocaleString("en-IN")}
+
+                        </div>
+
+                    `;
+
+
+                    baggageList.appendChild(card);
+
+                }
+            );
+
+        }
+
+
+        /* =========================================================
+           INITIALIZE BRAINTREE
+        ========================================================= */
+
+        async function initializeBraintree() {
+
+            try {
+
+                console.log(
+                    "Requesting Braintree client token..."
+                );
+
+
+                const response =
+                    await fetch(
+                        `${PAYMENT_SERVICE_URL}/client-token`
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                console.log(
+                    "Client token response:",
+                    data
+                );
+
+
+                if (
+                    !response.ok ||
+                    !data.success ||
+                    !data.client_token
+                ) {
+
+                    throw new Error(
+                        data.message ||
+                        "Unable to get Braintree client token."
+                    );
+
+                }
+
+
+                /* =================================================
+                   CREATE CLIENT
+                ================================================= */
+
+                const clientInstance =
+                    await braintree.client.create({
+
+                        authorization:
+                            data.client_token
+
+                    });
+
+
+                console.log(
+                    "Braintree client created."
+                );
+
+
+                /* =================================================
+                   CREATE HOSTED FIELDS
+                ================================================= */
+
+                hostedFieldsInstance =
+                    await braintree.hostedFields.create({
+
+                        client:
+                            clientInstance,
+
+                        styles: {
+
+                            input: {
+
+                                "font-size":
+                                    "16px",
+
+                                color:
+                                    "#172033"
+
+                            },
+
+                            "input.invalid": {
+
+                                color:
+                                    "#dc2626"
+
+                            },
+
+                            "input.valid": {
+
+                                color:
+                                    "#047857"
+
+                            }
+
+                        },
+
+
+                        fields: {
+
+                            number: {
+
+                                selector:
+                                    "#card-number",
+
+                                placeholder:
+                                    "4111 1111 1111 1111"
+
+                            },
+
+
+                            expirationDate: {
+
+                                selector:
+                                    "#expiration-date",
+
+                                placeholder:
+                                    "MM/YY"
+
+                            },
+
+
+                            cvv: {
+
+                                selector:
+                                    "#cvv",
+
+                                placeholder:
+                                    "123"
+
+                            }
+
+                        }
+
+                    });
+
+
+                console.log(
+                    "Braintree Hosted Fields initialized."
+                );
+
+
+                /* =================================================
+                   ENABLE BUTTON
+                ================================================= */
+
+                if (
+                    flight &&
+                    flightId &&
+                    passengers.length > 0 &&
+                    selectedSeats.length > 0 &&
+                    totalAmount > 0
+                ) {
+
+                    payBtn.disabled =
+                        false;
+
+                    payBtn.textContent =
+                        `Pay ₹${totalAmount.toLocaleString("en-IN")}`;
+
+                }
+
+
+                /* =================================================
+                   VALIDATION EVENTS
+                ================================================= */
+
+                hostedFieldsInstance.on(
+                    "validityChange",
+                    function (event) {
+
+                        updateFieldErrors(
+                            event.fields
+                        );
+
+                    }
+                );
+
+
+                hostedFieldsInstance.on(
+                    "cardTypeChange",
+                    function (event) {
+
+                        console.log(
+                            "Card type:",
+                            event.cards
+                        );
+
+                    }
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Braintree initialization error:",
+                    error
+                );
+
+
+                payBtn.disabled =
+                    true;
+
+
+                payBtn.textContent =
+                    "Payment Unavailable";
+
+
+                message.innerHTML = `
+
+                    <div class="error-box">
+
+                        ⚠️ Braintree initialization failed.
+
+                        <br><br>
+
+                        ${error.message}
+
+                        <br><br>
+
+                        Please make sure:
+
+                        <br>
+                        • Payment Service is running on port 5004
+
+                        <br>
+                        • Braintree Sandbox credentials are correct
+
+                        <br>
+                        • /client-token is working
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+
+        /* =========================================================
+           FIELD ERRORS
+        ========================================================= */
+
+        function updateFieldErrors(fields) {
+
+            const numberError =
+                document.getElementById(
+                    "card-number-error"
+                );
+
+
+            const expirationError =
+                document.getElementById(
+                    "expiration-error"
+                );
+
+
+            const cvvError =
+                document.getElementById(
+                    "cvv-error"
+                );
+
+
+            numberError.textContent = "";
+
+            expirationError.textContent = "";
+
+            cvvError.textContent = "";
+
+
+            if (
+                fields.number &&
+                !fields.number.isValid &&
+                fields.number.isPotentiallyValid === false
+            ) {
+
+                numberError.textContent =
+                    "Enter a valid card number.";
+
+            }
+
+
+            if (
+                fields.expirationDate &&
+                !fields.expirationDate.isValid &&
+                fields.expirationDate.isPotentiallyValid === false
+            ) {
+
+                expirationError.textContent =
+                    "Enter a valid expiration date.";
+
+            }
+
+
+            if (
+                fields.cvv &&
+                !fields.cvv.isValid &&
+                fields.cvv.isPotentiallyValid === false
+            ) {
+
+                cvvError.textContent =
+                    "Enter a valid CVV.";
+
+            }
+
+        }
+
+
+        /* =========================================================
+           CREATE BOOKING ID
+        ========================================================= */
+
+        function getBookingId() {
+
+            let bookingId =
+                localStorage.getItem(
+                    "bookingId"
+                );
+
+
+            if (!bookingId) {
+
+                bookingId =
+                    "BOOK-" +
+                    Date.now();
+
+
+                localStorage.setItem(
+                    "bookingId",
+                    bookingId
+                );
+
+            }
+
+
+            return bookingId;
+
+        }
+
+
+        /* =========================================================
+           MAKE PAYMENT
+        ========================================================= */
+
+        async function makePayment() {
+
+            try {
+
+                /* =================================================
+                   VALIDATE
+                ================================================= */
+
+                validateBookingData();
+
+
+                if (!flight) {
+
+                    throw new Error(
+                        "Flight information is still loading."
+                    );
+
+                }
+
+
+                if (!hostedFieldsInstance) {
+
+                    throw new Error(
+                        "Braintree payment form is not ready."
+                    );
+
+                }
+
+
+                if (totalAmount <= 0) {
+
+                    throw new Error(
+                        "Invalid payment amount."
+                    );
+
+                }
+
+
+                /* =================================================
+                   DISABLE BUTTON
+                ================================================= */
+
+                payBtn.disabled =
+                    true;
+
+
+                payBtn.textContent =
+                    "Processing Payment...";
+
+
+                message.innerHTML = "";
+
+
+                /* =================================================
+                   BOOKING ID
+                ================================================= */
+
+                const bookingId =
+                    getBookingId();
+
+
+                console.log(
+                    "Booking ID:",
+                    bookingId
+                );
+
+
+                /* =================================================
+                   TOKENIZE CARD
+                ================================================= */
+
+                console.log(
+                    "Tokenizing card..."
+                );
+
+
+                const payload =
+                    await hostedFieldsInstance.tokenize();
+
+
+                console.log(
+                    "Card tokenization successful."
+                );
+
+
+                const nonce =
+                    payload.nonce;
+
+
+                if (!nonce) {
+
+                    throw new Error(
+                        "Braintree did not return a payment nonce."
+                    );
+
+                }
+
+
+                /* =================================================
+                   SEAT NUMBERS
+                ================================================= */
+
+                const seatNumbers =
+                    selectedSeats.map(
+                        function (seat) {
+
+                            if (
+                                typeof seat === "object"
+                            ) {
+
+                                return (
+                                    seat.seat_number ||
+                                    seat.seat ||
+                                    seat.seatNumber
+                                );
+
+                            }
+
+                            return seat;
+
+                        }
+                    );
+
+
+                /* =================================================
+                   PAYMENT DATA
+                ================================================= */
+
+                const paymentData = {
+
+                    booking_id:
+                        String(bookingId),
+
+                    amount:
+                        Number(
+                            totalAmount.toFixed(2)
+                        ),
+
+                    payment_method_nonce:
+                        nonce,
+
+                    flight_id:
+                        String(flightId),
+
+                    seat_numbers:
+                        seatNumbers,
+
+                    passenger_count:
+                        passengers.length,
+
+                    baggage_total:
+                        Number(
+                            baggageTotal.toFixed(2)
+                        )
+
+                };
+
+
+                console.log(
+                    "Sending payment data:",
+                    paymentData
+                );
+
+
+                /* =================================================
+                   PAYMENT SERVICE
+                ================================================= */
+
+                const response =
+                    await fetch(
+
+                        `${PAYMENT_SERVICE_URL}/payment`,
+
+                        {
+
+                            method:
+                                "POST",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json"
+
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    paymentData
+                                )
+
+                        }
+
+                    );
+
+
+                const paymentResult =
+                    await response.json();
+
+
+                console.log(
+                    "Payment result:",
+                    paymentResult
+                );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+
+                        paymentResult.error ||
+                        paymentResult.message ||
+                        "Braintree payment failed."
+
+                    );
+
+                }
+
+
+                /* =================================================
+                   PAYMENT INFORMATION
+                ================================================= */
+
+                const finalBookingId =
+                    paymentResult.booking_id ||
+                    paymentResult.bookingId ||
+                    bookingId;
+
+
+                const finalPaymentId =
+                    paymentResult.payment_id ||
+                    paymentResult.paymentId ||
+                    "PAY-" + Date.now();
+
+
+                const finalAmount =
+                    Number(
+                        paymentResult.amount ||
+                        totalAmount
+                    );
+
+
+                const finalStatus =
+                    paymentResult.status ||
+                    "SUCCESS";
+
+
+                /* =================================================
+                   SAVE PAYMENT INFORMATION
+                ================================================= */
+
+                localStorage.setItem(
+                    "bookingId",
+                    String(finalBookingId)
+                );
+
+
+                localStorage.setItem(
+                    "paymentId",
+                    String(finalPaymentId)
+                );
+
+
+                localStorage.setItem(
+                    "paymentStatus",
+                    String(finalStatus)
+                );
+
+
+                localStorage.setItem(
+                    "paymentAmount",
+                    String(finalAmount)
+                );
+
+
+                localStorage.setItem(
+                    "braintreeTransactionId",
+                    String(
+                        paymentResult.transaction_id ||
+                        ""
+                    )
+                );
+
+
+                /* =================================================
+                   CREATE TICKET DATA
+                ================================================= */
+
+                const ticketData = {
+
+                    booking_id:
+                        String(finalBookingId),
+
+                    passenger_count:
+                        passengers.length,
+
+                    flight_id:
+                        String(flightId),
+
+                    flight_number:
+                        flight.flight_number,
+
+                    source:
+                        flight.source,
+
+                    destination:
+                        flight.destination,
+
+                    flight_date:
+                        flight.date,
+
+                    departure_time:
+                        flight.departure_time ||
+                        flight.departure ||
+                        "",
+
+                    arrival_time:
+                        flight.arrival_time ||
+                        flight.arrival ||
+                        "",
+
+                    passengers:
+                        passengers,
+
+                    selected_seats:
+                        seatNumbers,
+
+                    baggage:
+                        passengerBaggage,
+
+                    flight_price:
+                        Number(
+                            flightTotal
+                        ),
+
+                    baggage_total:
+                        Number(
+                            baggageTotal
+                        ),
+
+                    amount:
+                        Number(
+                            finalAmount
+                        ),
+
+                    payment_id:
+                        String(finalPaymentId),
+
+                    payment_status:
+                        String(finalStatus),
+
+                    transaction_id:
+                        String(
+                            paymentResult.transaction_id ||
+                            ""
+                        )
+
+                };
+
+
+                console.log(
+                    "Creating multi-passenger ticket:",
+                    ticketData
+                );
+
+
+                /* =================================================
+                   TICKET SERVICE
+                ================================================= */
+
+                const ticketResponse =
+                    await fetch(
+
+                        `${TICKET_SERVICE_URL}/tickets`,
+
+                        {
+
+                            method:
+                                "POST",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json"
+
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    ticketData
+                                )
+
+                        }
+
+                    );
+
+
+                const ticketResult =
+                    await ticketResponse.json();
+
+
+                console.log(
+                    "Ticket result:",
+                    ticketResult
+                );
+
+
+                if (!ticketResponse.ok) {
+
+                    throw new Error(
+
+                        ticketResult.error ||
+                        ticketResult.message ||
+                        "Ticket generation failed."
+
+                    );
+
+                }
+
+
+                /* =================================================
+                   GET TICKET
+                ================================================= */
+
+                const ticket =
+                    ticketResult.ticket ||
+                    ticketResult.data ||
+                    ticketResult;
+
+
+                const ticketNumber =
+                    ticket.ticket_number ||
+                    ticket.ticketNumber ||
+                    "";
+
+
+                if (ticketNumber) {
+
+                    localStorage.setItem(
+                        "ticketNumber",
+                        String(ticketNumber)
+                    );
+
+                }
+
+
+                /* =================================================
+                   SAVE COMPLETE BOOKING DATA
+                ================================================= */
+
+                localStorage.setItem(
+                    "ticketData",
+                    JSON.stringify(ticketData)
+                );
+
+
+                localStorage.setItem(
+                    "finalTicket",
+                    JSON.stringify(ticket)
+                );
+
+
+                /* =================================================
+                   SUCCESS
+                ================================================= */
+
+                message.innerHTML = `
+
+                    <div class="success-box">
+
+                        <div class="success-icon">
+                            ✅
+                        </div>
+
+                        <h2>
+                            Payment Successful!
+                        </h2>
+
+                        <p>
+                            Your complete booking has been
+                            successfully paid.
+                        </p>
+
+                        <p>
+
+                            Passengers:
+
+                            <strong>
+                                ${passengers.length}
+                            </strong>
+
+                        </p>
+
+                        <p>
+
+                            Seats:
+
+                            <strong>
+                                ${seatNumbers.join(", ")}
+                            </strong>
+
+                        </p>
+
+                        <p>
+
+                            Amount Paid:
+
+                            <strong>
+                                ₹${finalAmount.toLocaleString("en-IN")}
+                            </strong>
+
+                        </p>
+
+                        <p>
+
+                            Booking ID:
+
+                            <strong>
+                                ${finalBookingId}
+                            </strong>
+
+                        </p>
+
+
+                        <div class="payment-id">
+
+                            Payment ID:
+                            ${finalPaymentId}
+
+                        </div>
+
+
+                        <br><br>
+
+
+                        <p>
+
+                            Ticket Number:
+
+                            <strong>
+
+                                ${
+                                    ticketNumber ||
+                                    "Generated"
+
+                                }
+
+                            </strong>
+
+                        </p>
+
+
+                        <p>
+                            Opening your ticket...
+                        </p>
+
+                    </div>
+
+                `;
+
+
+                payBtn.textContent =
+                    "Payment Successful";
+
+
+                /* =================================================
+                   OPEN TICKET
+                ================================================= */
+
+                setTimeout(
+                    function () {
+
+                        window.location.href =
+                            "ticket.html";
+
+                    },
+                    1800
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Payment error:",
+                    error
+                );
+
+
+                let errorMessage =
+                    error.message ||
+                    "Payment failed.";
+
+
+                message.innerHTML = `
+
+                    <div class="error-box">
+
+                        ⚠️ <strong>Payment Failed</strong>
+
+                        <br><br>
+
+                        ${errorMessage}
+
+                        <br><br>
+
+                        Please check your card details
+                        and try again.
+
+                    </div>
+
+                `;
+
+
+                payBtn.disabled =
+                    false;
+
+
+                payBtn.textContent =
+                    `Pay ₹${totalAmount.toLocaleString("en-IN")}`;
+
+            }
+
+        }
+
+
+        /* =========================================================
+           EVENT
+        ========================================================= */
+
+        payBtn.addEventListener(
+            "click",
+            makePayment
+        );
+
+
+        /* =========================================================
+           INITIALIZE PAGE
+        ========================================================= */
+
+        async function initializePage() {
+
+            displayPassengers();
+
+            displayBaggage();
+
+            await loadFlight();
+
+            await initializeBraintree();
+
+        }
+
+
+        initializePage();
+
+    </script>
+
+</body>
+
+</html>

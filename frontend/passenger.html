@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Passenger Details - Flight Booking System</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #172033;
+            
+            background-image:
+            linear-gradient(
+            rgba(4, 35, 75, 0.45),
+            rgba(4, 35, 75, 0.45)
+            ),
+            url("/static/image/passenger.jpeg");
+            
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        nav {
+
+            height: 70px;
+
+            background: #2563eb;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 0 7%;
+
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+
+        }
+
+
+        .logo {
+
+            font-size: 24px;
+
+            font-weight: bold;
+
+            color: white;
+
+        }
+
+
+        .nav-title {
+
+            color: #64748b;
+
+            font-size: 14px;
+
+        }
+
+
+        /* =========================
+           CONTAINER
+        ========================= */
+
+        .container {
+
+            width: 92%;
+
+            max-width: 850px;
+
+            margin: 35px auto 60px;
+
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .page-header {
+
+            text-align: center;
+
+            margin-bottom: 30px;
+
+        }
+
+
+        .page-header h1 {
+
+            color: white;
+
+            font-size: 32px;
+
+            margin-bottom: 8px;
+
+        }
+
+
+        .page-header p {
+
+            color: #a6c6f3;
+
+        }
+
+
+        /* =========================
+           FLIGHT SUMMARY
+        ========================= */
+
+        .summary {
+
+            background: white;
+
+            border-radius: 18px;
+
+            padding: 22px;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 8px 25px
+                rgba(0, 0, 0, 0.07);
+
+        }
+
+
+        .summary-title {
+
+            color: #123b70;
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            margin-bottom: 15px;
+
+        }
+
+
+        .seat-list {
+
+            display: flex;
+
+            gap: 10px;
+
+            flex-wrap: wrap;
+
+        }
+
+
+        .seat-tag {
+
+            background: #1769e0;
+
+            color: white;
+
+            padding: 8px 15px;
+
+            border-radius: 20px;
+
+            font-weight: bold;
+
+            font-size: 13px;
+
+        }
+
+
+        /* =========================
+           PASSENGER CARD
+        ========================= */
+
+        .passenger-card {
+
+            background: white;
+
+            border-radius: 18px;
+
+            padding: 25px;
+
+            margin-bottom: 22px;
+
+            box-shadow:
+                0 8px 25px
+                rgba(0, 0, 0, 0.07);
+
+            border-left: 5px solid #1769e0;
+
+        }
+
+
+        .passenger-header {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 22px;
+
+            gap: 10px;
+
+            flex-wrap: wrap;
+
+        }
+
+
+        .passenger-title {
+
+            color: #123b70;
+
+            font-size: 20px;
+
+            font-weight: bold;
+
+        }
+
+
+        .seat-badge {
+
+            background: #eef5ff;
+
+            color: #1769e0;
+
+            padding: 8px 14px;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+        }
+
+
+        /* =========================
+           FORM
+        ========================= */
+
+        .form-group {
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .form-group label {
+
+            display: block;
+
+            margin-bottom: 8px;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            color: #374151;
+
+        }
+
+
+        .required {
+
+            color: #dc2626;
+
+        }
+
+
+        .form-group input,
+        .form-group select {
+
+            width: 100%;
+
+            padding: 13px 14px;
+
+            border: 1px solid #cbd5e1;
+
+            border-radius: 10px;
+
+            font-size: 15px;
+
+            outline: none;
+
+            background: white;
+
+            transition: 0.2s;
+
+        }
+
+
+        .form-group input:focus,
+        .form-group select:focus {
+
+            border-color: #1769e0;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(23, 105, 224, 0.1);
+
+        }
+
+
+        .form-group input.invalid,
+        .form-group select.invalid {
+
+            border-color: #dc2626;
+
+            background: #fff7f7;
+
+        }
+
+
+        .error-text {
+
+            color: #dc2626;
+
+            font-size: 12px;
+
+            margin-top: 6px;
+
+            display: none;
+
+        }
+
+
+        /* =========================
+           GENDER
+        ========================= */
+
+        .gender-options {
+
+            display: flex;
+
+            gap: 12px;
+
+            flex-wrap: wrap;
+
+        }
+
+
+        .gender-option {
+
+            flex: 1;
+
+            min-width: 100px;
+
+            position: relative;
+
+        }
+
+
+        .gender-option input {
+
+            display: none;
+
+        }
+
+
+        .gender-option label {
+
+            display: block;
+
+            padding: 13px;
+
+            text-align: center;
+
+            border: 1px solid #cbd5e1;
+
+            border-radius: 10px;
+
+            cursor: pointer;
+
+            color: #475569;
+
+            transition: 0.2s;
+
+        }
+
+
+        .gender-option input:checked + label {
+
+            border-color: #1769e0;
+
+            background: #eef5ff;
+
+            color: #1769e0;
+
+            font-weight: bold;
+
+        }
+
+
+        /* =========================
+           BUTTON
+        ========================= */
+
+        .continue-btn {
+
+            width: 100%;
+
+            border: none;
+
+            padding: 16px;
+
+            border-radius: 12px;
+
+            background: #1769e0;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+
+        }
+
+
+        .continue-btn:hover {
+
+            background: #1256bd;
+
+            transform: translateY(-1px);
+
+        }
+
+
+        /* =========================
+           MESSAGE
+        ========================= */
+
+        .message {
+
+            display: none;
+
+            padding: 15px;
+
+            border-radius: 12px;
+
+            margin-bottom: 20px;
+
+            text-align: center;
+
+            background: #fee2e2;
+
+            color: #991b1b;
+
+        }
+
+
+        /* =========================
+           INFO
+        ========================= */
+
+        .info-box {
+
+            background: #eef5ff;
+
+            color: #1e40af;
+
+            padding: 15px;
+
+            border-radius: 12px;
+
+            margin-bottom: 25px;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 600px) {
+
+            nav {
+
+                padding: 0 20px;
+
+            }
+
+
+            .nav-title {
+
+                display: none;
+
+            }
+
+
+            .page-header h1 {
+
+                font-size: 26px;
+
+            }
+
+
+            .passenger-card {
+
+                padding: 20px;
+
+            }
+
+
+            .gender-option {
+
+                min-width: 80px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<nav>
+
+    <div class="logo">
+        ✈️ SkyBook
+    </div>
+
+</nav>
+
+
+<div class="container">
+
+
+    <!-- =========================
+         HEADER
+    ========================= -->
+
+    <div class="page-header">
+
+        <h1>
+            Passenger Details
+        </h1>
+
+        <p>
+            Enter details for each passenger
+        </p>
+
+    </div>
+
+
+    <!-- ERROR -->
+    <div
+        id="message"
+        class="message"
+    ></div>
+
+
+    <!-- INFO -->
+    <div class="info-box">
+
+        👤 Please enter the correct details
+        for every passenger travelling on
+        this booking.
+
+        <br><br>
+
+        Maximum passengers per booking:
+        <strong>4</strong>
+
+    </div>
+
+
+    <!-- =========================
+         SELECTED SEATS SUMMARY
+    ========================= -->
+
+    <div class="summary">
+
+        <div class="summary-title">
+            Selected Seats
+        </div>
+
+        <div
+            id="seatList"
+            class="seat-list"
+        ></div>
+
+    </div>
+
+
+    <!-- =========================
+         PASSENGER FORMS
+    ========================= -->
+
+    <div id="passengerForms"></div>
+
+
+    <!-- =========================
+         CONTINUE
+    ========================= -->
+
+    <button
+        id="continueBtn"
+        class="continue-btn"
+    >
+
+        Continue to Baggage →
+
+    </button>
+
+
+</div>
+
+
+<script>
+
+    // ==========================================
+    // VARIABLES
+    // ==========================================
+
+    const MAX_PASSENGERS = 4;
+
+    let selectedSeats = [];
+
+    let passengers = [];
+
+
+    // ==========================================
+    // LOAD SELECTED SEATS
+    // ==========================================
+
+    function loadSelectedSeats() {
+
+        const savedSeats =
+            localStorage.getItem("selectedSeats");
+
+
+        if (!savedSeats) {
+
+            showMessage(
+                "No seats selected. Please go back and select seats."
+            );
+
+            return false;
+
+        }
+
+
+        try {
+
+            selectedSeats =
+                JSON.parse(savedSeats);
+
+        } catch (error) {
+
+            console.error(
+                "Seat data error:",
+                error
+            );
+
+            showMessage(
+                "Invalid seat information."
+            );
+
+            return false;
+
+        }
+
+
+        if (!Array.isArray(selectedSeats)) {
+
+            showMessage(
+                "Invalid seat selection."
+            );
+
+            return false;
+
+        }
+
+
+        if (
+            selectedSeats.length < 1 ||
+            selectedSeats.length > MAX_PASSENGERS
+        ) {
+
+            showMessage(
+                "You can book between 1 and 4 seats."
+            );
+
+            return false;
+
+        }
+
+
+        return true;
+
+    }
+
+
+    // ==========================================
+    // MESSAGE
+    // ==========================================
+
+    function showMessage(text) {
+
+        const message =
+            document.getElementById("message");
+
+        message.textContent = text;
+
+        message.style.display = "block";
+
+    }
+
+
+    // ==========================================
+    // DISPLAY SELECTED SEATS
+    // ==========================================
+
+    function displaySelectedSeats() {
+
+        const seatList =
+            document.getElementById("seatList");
+
+
+        seatList.innerHTML = "";
+
+
+        selectedSeats.forEach(
+            (seat, index) => {
+
+                const tag =
+                    document.createElement("div");
+
+                tag.className =
+                    "seat-tag";
+
+                tag.textContent =
+                    `Passenger ${index + 1} • Seat ${seat}`;
+
+                seatList.appendChild(tag);
+
+            }
+        );
+
+    }
+
+
+    // ==========================================
+    // CREATE PASSENGER FORMS
+    // ==========================================
+
+    function createPassengerForms() {
+
+        const container =
+            document.getElementById(
+                "passengerForms"
+            );
+
+
+        container.innerHTML = "";
+
+
+        selectedSeats.forEach(
+            (seat, index) => {
+
+                const card =
+                    document.createElement("div");
+
+                card.className =
+                    "passenger-card";
+
+
+                card.innerHTML = `
+
+                    <div class="passenger-header">
+
+                        <div class="passenger-title">
+                            Passenger ${index + 1}
+                        </div>
+
+                        <div class="seat-badge">
+                            Seat ${seat}
+                        </div>
+
+                    </div>
+
+
+                    <!-- NAME -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Full Name
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="name-${index}"
+                            placeholder="Enter passenger full name"
+                            autocomplete="off"
+                        >
+
+                        <div
+                            id="name-error-${index}"
+                            class="error-text"
+                        >
+                            Please enter passenger name.
+                        </div>
+
+                    </div>
+
+
+                    <!-- AGE -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Age
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="number"
+                            id="age-${index}"
+                            placeholder="Enter age"
+                            min="1"
+                            max="120"
+                        >
+
+                        <div
+                            id="age-error-${index}"
+                            class="error-text"
+                        >
+                            Please enter a valid age.
+                        </div>
+
+                    </div>
+
+
+                    <!-- GENDER -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Gender
+                            <span class="required">*</span>
+                        </label>
+
+
+                        <div class="gender-options">
+
+
+                            <div class="gender-option">
+
+                                <input
+                                    type="radio"
+                                    id="male-${index}"
+                                    name="gender-${index}"
+                                    value="Male"
+                                >
+
+                                <label for="male-${index}">
+                                    👨 Male
+                                </label>
+
+                            </div>
+
+
+                            <div class="gender-option">
+
+                                <input
+                                    type="radio"
+                                    id="female-${index}"
+                                    name="gender-${index}"
+                                    value="Female"
+                                >
+
+                                <label for="female-${index}">
+                                    👩 Female
+                                </label>
+
+                            </div>
+
+
+                            <div class="gender-option">
+
+                                <input
+                                    type="radio"
+                                    id="other-${index}"
+                                    name="gender-${index}"
+                                    value="Other"
+                                >
+
+                                <label for="other-${index}">
+                                    Other
+                                </label>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div
+                            id="gender-error-${index}"
+                            class="error-text"
+                        >
+                            Please select gender.
+                        </div>
+
+                    </div>
+
+                `;
+
+
+                container.appendChild(card);
+
+            }
+        );
+
+    }
+
+
+    // ==========================================
+    // VALIDATE PASSENGERS
+    // ==========================================
+
+    function validatePassengers() {
+
+        passengers = [];
+
+        let isValid = true;
+
+
+        selectedSeats.forEach(
+            (seat, index) => {
+
+                // --------------------------
+                // NAME
+                // --------------------------
+
+                const nameInput =
+                    document.getElementById(
+                        `name-${index}`
+                    );
+
+                const nameError =
+                    document.getElementById(
+                        `name-error-${index}`
+                    );
+
+
+                const name =
+                    nameInput.value.trim();
+
+
+                if (
+                    name.length < 2 ||
+                    !/^[a-zA-Z\s.'-]+$/.test(name)
+                ) {
+
+                    nameInput.classList.add(
+                        "invalid"
+                    );
+
+                    nameError.style.display =
+                        "block";
+
+                    isValid = false;
+
+                } else {
+
+                    nameInput.classList.remove(
+                        "invalid"
+                    );
+
+                    nameError.style.display =
+                        "none";
+
+                }
+
+
+                // --------------------------
+                // AGE
+                // --------------------------
+
+                const ageInput =
+                    document.getElementById(
+                        `age-${index}`
+                    );
+
+                const ageError =
+                    document.getElementById(
+                        `age-error-${index}`
+                    );
+
+
+                const age =
+                    Number(ageInput.value);
+
+
+                if (
+                    !Number.isInteger(age) ||
+                    age < 1 ||
+                    age > 120
+                ) {
+
+                    ageInput.classList.add(
+                        "invalid"
+                    );
+
+                    ageError.style.display =
+                        "block";
+
+                    isValid = false;
+
+                } else {
+
+                    ageInput.classList.remove(
+                        "invalid"
+                    );
+
+                    ageError.style.display =
+                        "none";
+
+                }
+
+
+                // --------------------------
+                // GENDER
+                // --------------------------
+
+                const gender =
+                    document.querySelector(
+                        `input[name="gender-${index}"]:checked`
+                    );
+
+
+                const genderError =
+                    document.getElementById(
+                        `gender-error-${index}`
+                    );
+
+
+                if (!gender) {
+
+                    genderError.style.display =
+                        "block";
+
+                    isValid = false;
+
+                } else {
+
+                    genderError.style.display =
+                        "none";
+
+                }
+
+
+                // --------------------------
+                // PASSENGER OBJECT
+                // --------------------------
+
+                if (
+                    name &&
+                    Number.isInteger(age) &&
+                    age >= 1 &&
+                    age <= 120 &&
+                    gender
+                ) {
+
+                    passengers.push({
+
+                        passenger_number:
+                            index + 1,
+
+                        seat_number:
+                            String(seat),
+
+                        name:
+                            name,
+
+                        age:
+                            age,
+
+                        gender:
+                            gender.value
+
+                    });
+
+                }
+
+            }
+        );
+
+
+        return isValid;
+
+    }
+
+
+    // ==========================================
+    // CONTINUE BUTTON
+    // ==========================================
+
+    document
+        .getElementById("continueBtn")
+        .addEventListener(
+            "click",
+            function () {
+
+
+                const valid =
+                    validatePassengers();
+
+
+                if (!valid) {
+
+                    window.scrollTo({
+                        top: 0,
+                        behavior: "smooth"
+                    });
+
+                    return;
+
+                }
+
+
+                console.log(
+                    "Passenger details:",
+                    passengers
+                );
+
+
+                // Save passengers
+                localStorage.setItem(
+                    "passengers",
+                    JSON.stringify(
+                        passengers
+                    )
+                );
+
+
+                // Save passenger count
+                localStorage.setItem(
+                    "passengerCount",
+                    String(
+                        passengers.length
+                    )
+                );
+
+
+                // Continue
+                window.location.href =
+                    "baggage.html";
+
+            }
+        );
+
+
+    // ==========================================
+    // INITIALIZE
+    // ==========================================
+
+    function initializePage() {
+
+        if (!loadSelectedSeats()) {
+
+            document.getElementById(
+                "continueBtn"
+            ).disabled = true;
+
+            return;
+
+        }
+
+
+        displaySelectedSeats();
+
+        createPassengerForms();
+
+    }
+
+
+    initializePage();
+
+</script>
+
+
+</body>
+
+</html>

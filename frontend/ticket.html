@@ -1,0 +1,1751 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Ticket - SkyBook</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .navbar {
+            height: 90px;
+            background: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 8%;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.06);
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 35px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            background: white;
+            color: #2563eb;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 9px;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            background: #e0f2fe;
+            color: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* ================= PAGE ================= */
+
+        .page {
+            max-width: 1000px;
+            margin: 45px auto;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 40px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #667085;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        /* ================= SUCCESS ================= */
+
+        .success-banner {
+            background: #ecfdf3;
+            border: 1px solid #a7f3d0;
+            color: #047857;
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .success-icon {
+            font-size: 55px;
+            margin-bottom: 8px;
+        }
+
+        .success-banner h2 {
+            margin: 5px 0;
+        }
+
+        .success-banner p {
+            margin: 5px 0;
+        }
+
+        /* ================= TICKET ================= */
+
+        .ticket {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .ticket-header {
+            background: #2563eb;
+            color: white;
+            padding: 25px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .ticket-header h2 {
+            margin: 0;
+            font-size: 26px;
+        }
+
+        .ticket-number {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .ticket-body {
+            padding: 30px;
+        }
+
+        /* ================= FLIGHT DETAILS ================= */
+
+        .details-title {
+            font-size: 21px;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .detail-box {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 17px;
+        }
+
+        .detail-label {
+            color: #667085;
+            font-size: 13px;
+            margin-bottom: 7px;
+        }
+
+        .detail-value {
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        /* ================= ROUTE ================= */
+
+        .route-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        .route {
+            font-size: 26px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .route-arrow {
+            margin: 0 15px;
+        }
+
+        /* ================= PASSENGERS ================= */
+
+        .passenger-section {
+            margin-top: 35px;
+        }
+
+        .passenger-card {
+            border: 1px solid #dbe3ef;
+            border-radius: 15px;
+            margin-bottom: 18px;
+            overflow: hidden;
+            background: white;
+        }
+
+        .passenger-header {
+            background: #f1f5f9;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .passenger-header h4 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .seat-badge {
+            background: #2563eb;
+            color: white;
+            padding: 7px 13px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .passenger-body {
+            padding: 20px;
+        }
+
+        .passenger-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .passenger-detail {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 13px;
+        }
+
+        .passenger-detail-label {
+            font-size: 12px;
+            color: #667085;
+            margin-bottom: 5px;
+        }
+
+        .passenger-detail-value {
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        /* ================= BAGGAGE ================= */
+
+        .baggage-card {
+            margin-top: 15px;
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .baggage-title {
+            font-weight: bold;
+            color: #c2410c;
+            margin-bottom: 8px;
+        }
+
+        .baggage-info {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        /* ================= PRICE ================= */
+
+        .price-section {
+            margin-top: 30px;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 20px;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            font-size: 17px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .price-row.total {
+            border-bottom: none;
+            color: #2563eb;
+            font-size: 24px;
+            font-weight: bold;
+            padding-top: 20px;
+        }
+
+        /* ================= PAYMENT ================= */
+
+        .payment-status {
+            margin-top: 25px;
+            background: #ecfdf3;
+            border: 1px solid #a7f3d0;
+            color: #047857;
+            border-radius: 12px;
+            padding: 18px;
+            text-align: center;
+        }
+
+        .payment-status strong {
+            font-size: 18px;
+        }
+
+        .transaction-box {
+            margin-top: 15px;
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        /* ================= ACTIONS ================= */
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            margin-bottom: 40px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 10px;
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .home-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .home-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .print-btn {
+            background: #172033;
+            color: white;
+        }
+
+        .print-btn:hover {
+            background: #000;
+        }
+
+        /* ================= LOADING ================= */
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 18px;
+        }
+
+        /* ================= ERROR ================= */
+
+        .error-box {
+            background: #fff1f2;
+            border: 1px solid #fecdd3;
+            color: #be123c;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media(max-width: 700px) {
+
+            .navbar {
+                padding: 0 20px;
+            }
+
+            .logo {
+                font-size: 24px;
+            }
+
+            .nav-links {
+                gap: 15px;
+            }
+
+            .nav-links a {
+                font-size: 14px;
+            }
+
+            .page-title {
+                font-size: 32px;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .passenger-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .ticket-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .route {
+                font-size: 21px;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        /* ================= PRINT ================= */
+
+        @media print {
+
+            body {
+                background: white;
+            }
+
+            .navbar,
+            .actions {
+                display: none;
+            }
+
+            .page {
+                margin: 0;
+                max-width: 100%;
+            }
+
+            .ticket {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        ✈️ SkyBook
+    </div>
+
+    <div class="nav-links">
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="flights.html">
+            Flights
+        </a>
+
+        <a href="login.html">
+            Login
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- ================= PAGE ================= -->
+
+<div class="page">
+
+    <h1 class="page-title">
+        🎫 Your Ticket
+    </h1>
+
+    <p class="subtitle">
+        Your flight booking has been confirmed.
+    </p>
+
+
+    <!-- ================= SUCCESS ================= -->
+
+    <div class="success-banner">
+
+        <div class="success-icon">
+            ✅
+        </div>
+
+        <h2>
+            Booking Confirmed!
+        </h2>
+
+        <p>
+            Your payment was successful and your ticket has been generated.
+        </p>
+
+    </div>
+
+
+    <!-- ================= TICKET ================= -->
+
+    <div id="ticketContainer"
+         class="ticket">
+
+        <div class="loading">
+            Loading ticket information...
+        </div>
+
+    </div>
+
+
+    <!-- ================= ACTIONS ================= -->
+
+    <div class="actions">
+
+        <button
+            class="btn print-btn"
+            type="button"
+            onclick="window.print()">
+
+            🖨️ Print / Save Ticket
+
+        </button>
+
+
+        <a
+            href="index.html"
+            class="btn home-btn">
+
+            🏠 Back to Home
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+// =====================================================
+// SERVICE URLS
+// =====================================================
+
+const FLIGHT_SERVICE_URL =
+    "http://localhost:5001";
+
+const TICKET_SERVICE_URL =
+    "http://localhost:5005";
+
+
+// =====================================================
+// LOCAL STORAGE
+// =====================================================
+
+const flightId =
+    localStorage.getItem("flightId");
+
+
+const bookingId =
+    localStorage.getItem("bookingId");
+
+
+const paymentId =
+    localStorage.getItem("paymentId");
+
+
+const paymentStatus =
+    localStorage.getItem("paymentStatus") || "SUCCESS";
+
+
+const paymentAmount =
+    Number(
+        localStorage.getItem("paymentAmount") ||
+        localStorage.getItem("totalAmount") ||
+        0
+    );
+
+
+const transactionId =
+    localStorage.getItem("transactionId") ||
+    localStorage.getItem("braintreeTransactionId") ||
+    "";
+
+
+const passengersFromStorage =
+    JSON.parse(
+        localStorage.getItem("passengers") ||
+        "[]"
+    );
+
+
+const passengerBaggageFromStorage =
+    JSON.parse(
+        localStorage.getItem("passengerBaggage") ||
+        "[]"
+    );
+
+
+const selectedSeats =
+    JSON.parse(
+        localStorage.getItem("selectedSeats") ||
+        "[]"
+    );
+
+
+const ticketContainer =
+    document.getElementById(
+        "ticketContainer"
+    );
+
+
+console.log("=================================");
+console.log("TICKET PAGE");
+console.log("Booking ID:", bookingId);
+console.log("Flight ID:", flightId);
+console.log("Passengers:", passengersFromStorage);
+console.log("Seats:", selectedSeats);
+console.log("Payment ID:", paymentId);
+console.log("Transaction ID:", transactionId);
+console.log("=================================");
+
+
+// =====================================================
+// ESCAPE HTML
+// =====================================================
+
+function escapeHtml(value) {
+
+    if (value === null ||
+        value === undefined) {
+
+        return "";
+
+    }
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+// =====================================================
+// FORMAT MONEY
+// =====================================================
+
+function formatMoney(value) {
+
+    return Number(value || 0)
+        .toLocaleString(
+            "en-IN",
+            {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }
+        );
+
+}
+
+
+// =====================================================
+// LOAD TICKET
+// =====================================================
+
+async function loadTicket() {
+
+    if (!bookingId) {
+
+        ticketContainer.innerHTML = `
+
+            <div class="error-box">
+
+                ⚠️ Booking ID not found.
+
+                <br><br>
+
+                Please complete the payment first.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${TICKET_SERVICE_URL}/tickets/${encodeURIComponent(bookingId)}`
+            );
+
+
+        console.log(
+            "Ticket response:",
+            response.status
+        );
+
+
+        if (!response.ok) {
+
+            let errorData = {};
+
+            try {
+
+                errorData =
+                    await response.json();
+
+            }
+            catch (e) {
+
+                errorData = {};
+
+            }
+
+
+            throw new Error(
+                errorData.error ||
+                errorData.message ||
+                `Ticket Service returned ${response.status}`
+            );
+
+        }
+
+
+        const result =
+            await response.json();
+
+
+        console.log(
+            "Ticket result:",
+            result
+        );
+
+
+        const ticket =
+            result.ticket ||
+            result.data ||
+            result;
+
+
+        if (!ticket) {
+
+            throw new Error(
+                "Ticket data not found"
+            );
+
+        }
+
+
+        await displayTicket(ticket);
+
+    }
+    catch (error) {
+
+        console.error(
+            "Ticket loading error:",
+            error
+        );
+
+
+        ticketContainer.innerHTML = `
+
+            <div class="error-box">
+
+                ⚠️ Unable to load ticket.
+
+                <br><br>
+
+                ${escapeHtml(error.message)}
+
+                <br><br>
+
+                Make sure Ticket Service is running on port 5005.
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+// =====================================================
+// DISPLAY TICKET
+// =====================================================
+
+async function displayTicket(ticket) {
+
+
+    let flight = null;
+
+
+    // =================================================
+    // LOAD FLIGHT
+    // =================================================
+
+    if (flightId) {
+
+        try {
+
+            const response =
+                await fetch(
+                    `${FLIGHT_SERVICE_URL}/flights/${encodeURIComponent(flightId)}`
+                );
+
+
+            if (response.ok) {
+
+                const result =
+                    await response.json();
+
+
+                flight =
+                    result.flight ||
+                    result;
+
+            }
+
+        }
+        catch (error) {
+
+            console.warn(
+                "Flight details unavailable:",
+                error
+            );
+
+        }
+
+    }
+
+
+    // =================================================
+    // PASSENGERS
+    // =================================================
+
+    let passengers = [];
+
+
+    if (
+        Array.isArray(ticket.passengers) &&
+        ticket.passengers.length > 0
+    ) {
+
+        passengers =
+            ticket.passengers;
+
+    }
+    else if (
+        Array.isArray(
+            passengersFromStorage
+        ) &&
+        passengersFromStorage.length > 0
+    ) {
+
+        passengers =
+            passengersFromStorage;
+
+    }
+    else if (
+        ticket.passenger_data
+    ) {
+
+        try {
+
+            passengers =
+                JSON.parse(
+                    ticket.passenger_data
+                );
+
+        }
+        catch {
+
+            passengers = [];
+
+        }
+
+    }
+
+
+    // =================================================
+    // OLD SINGLE PASSENGER COMPATIBILITY
+    // =================================================
+
+    if (passengers.length === 0) {
+
+        passengers = [
+
+            {
+
+                passenger_number: 1,
+
+                passenger_name:
+                    ticket.passenger_name ||
+                    "Passenger",
+
+                name:
+                    ticket.passenger_name ||
+                    "Passenger",
+
+                seat_number:
+                    ticket.seat_number ||
+                    selectedSeats[0] ||
+                    "N/A",
+
+                age:
+                    ticket.age ||
+                    "",
+
+                gender:
+                    ticket.gender ||
+                    ""
+
+            }
+
+        ];
+
+    }
+
+
+    // =================================================
+    // FLIGHT INFORMATION
+    // =================================================
+
+    const flightNumber =
+        ticket.flight_number ||
+        ticket.flightNumber ||
+        (
+            flight
+                ? flight.flight_number
+                : "N/A"
+        );
+
+
+    const airline =
+        flight
+            ? (
+                flight.airline ||
+                "SkyBook Airline"
+            )
+            : "SkyBook Airline";
+
+
+    const source =
+        ticket.source ||
+        (
+            flight
+                ? flight.source
+                : "N/A"
+        );
+
+
+    const destination =
+        ticket.destination ||
+        (
+            flight
+                ? flight.destination
+                : "N/A"
+        );
+
+
+    const flightDate =
+        ticket.flight_date ||
+        ticket.flightDate ||
+        (
+            flight
+                ? flight.date
+                : "N/A"
+        );
+
+
+    const departure =
+        flight
+            ? (
+                flight.departure_time ||
+                flight.departure ||
+                "-"
+            )
+            : "-";
+
+
+    const arrival =
+        flight
+            ? (
+                flight.arrival_time ||
+                flight.arrival ||
+                "-"
+            )
+            : "-";
+
+
+    // =================================================
+    // SEATS
+    // =================================================
+
+    const seatNumbers =
+        passengers
+            .map(
+                passenger =>
+                    passenger.seat_number ||
+                    passenger.seatNumber
+            )
+            .filter(Boolean);
+
+
+    // =================================================
+    // BAGGAGE
+    // =================================================
+
+    let baggage = [];
+
+
+    if (
+        Array.isArray(ticket.baggage)
+    ) {
+
+        baggage =
+            ticket.baggage;
+
+    }
+    else if (
+        Array.isArray(
+            passengerBaggageFromStorage
+        )
+    ) {
+
+        baggage =
+            passengerBaggageFromStorage;
+
+    }
+    else if (
+        ticket.baggage_data
+    ) {
+
+        try {
+
+            baggage =
+                JSON.parse(
+                    ticket.baggage_data
+                );
+
+        }
+        catch {
+
+            baggage = [];
+
+        }
+
+    }
+
+
+    // =================================================
+    // TOTALS
+    // =================================================
+
+    const flightPricePerPassenger =
+        flight
+            ? Number(flight.price || 0)
+            : 0;
+
+
+    const passengerCount =
+        passengers.length;
+
+
+    const calculatedFlightTotal =
+        flightPricePerPassenger *
+        passengerCount;
+
+
+    let calculatedBaggageTotal = 0;
+
+
+    baggage.forEach(item => {
+
+        const price =
+            Number(
+                item.price ||
+                item.baggage_price ||
+                item.amount ||
+                0
+            );
+
+        calculatedBaggageTotal += price;
+
+    });
+
+
+    const ticketAmount =
+        Number(ticket.amount || 0);
+
+
+    const total =
+        paymentAmount ||
+        ticketAmount ||
+        (
+            calculatedFlightTotal +
+            calculatedBaggageTotal
+        );
+
+
+    const flightFare =
+        calculatedFlightTotal ||
+        Math.max(
+            0,
+            total - calculatedBaggageTotal
+        );
+
+
+    const baggageTotal =
+        calculatedBaggageTotal;
+
+
+    // =================================================
+    // TICKET NUMBER
+    // =================================================
+
+    const ticketNumber =
+        ticket.ticket_number ||
+        ticket.ticketNumber ||
+        localStorage.getItem(
+            "ticketNumber"
+        ) ||
+        "N/A";
+
+
+    const ticketBookingId =
+        ticket.booking_id ||
+        ticket.bookingId ||
+        bookingId;
+
+
+    // =================================================
+    // PASSENGER HTML
+    // =================================================
+
+    let passengerHtml = "";
+
+
+    passengers.forEach(
+        (passenger, index) => {
+
+
+            const passengerName =
+                passenger.passenger_name ||
+                passenger.name ||
+                "Passenger";
+
+
+            const seat =
+                passenger.seat_number ||
+                passenger.seatNumber ||
+                selectedSeats[index] ||
+                "N/A";
+
+
+            const age =
+                passenger.age ||
+                "N/A";
+
+
+            const gender =
+                passenger.gender ||
+                "N/A";
+
+
+            // Find baggage for this passenger
+            let passengerBag = null;
+
+
+            passengerBag =
+                baggage.find(
+                    item => {
+
+                        const itemSeat =
+                            item.seat_number ||
+                            item.seatNumber;
+
+                        const itemPassenger =
+                            item.passenger_number ||
+                            item.passengerNumber;
+
+                        return (
+                            String(itemSeat || "")
+                                .toUpperCase()
+                            ===
+                            String(seat || "")
+                                .toUpperCase()
+                        )
+                        ||
+                        Number(itemPassenger || 0)
+                            ===
+                            Number(
+                                passenger.passenger_number ||
+                                index + 1
+                            );
+
+                    }
+                );
+
+
+            // Fallback to same index
+            if (
+                !passengerBag &&
+                baggage[index]
+            ) {
+
+                passengerBag =
+                    baggage[index];
+
+            }
+
+
+            const bagType =
+                passengerBag
+                    ? (
+                        passengerBag.baggage_type ||
+                        passengerBag.baggageType ||
+                        passengerBag.type ||
+                        "No Baggage"
+                    )
+                    : "No Baggage";
+
+
+            const bagWeight =
+                passengerBag
+                    ? (
+                        passengerBag.weight ||
+                        passengerBag.baggage_weight ||
+                        passengerBag.baggageWeight ||
+                        0
+                    )
+                    : 0;
+
+
+            const bagPrice =
+                passengerBag
+                    ? Number(
+                        passengerBag.price ||
+                        passengerBag.baggage_price ||
+                        passengerBag.amount ||
+                        0
+                    )
+                    : 0;
+
+
+            passengerHtml += `
+
+                <div class="passenger-card">
+
+                    <div class="passenger-header">
+
+                        <h4>
+                            👤 Passenger ${index + 1}
+                        </h4>
+
+                        <div class="seat-badge">
+
+                            💺 Seat ${escapeHtml(seat)}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="passenger-body">
+
+                        <div class="passenger-grid">
+
+
+                            <div class="passenger-detail">
+
+                                <div class="passenger-detail-label">
+                                    Full Name
+                                </div>
+
+                                <div class="passenger-detail-value">
+
+                                    ${escapeHtml(
+                                        passengerName
+                                    )}
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="passenger-detail">
+
+                                <div class="passenger-detail-label">
+                                    Age
+                                </div>
+
+                                <div class="passenger-detail-value">
+
+                                    ${escapeHtml(age)}
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="passenger-detail">
+
+                                <div class="passenger-detail-label">
+                                    Gender
+                                </div>
+
+                                <div class="passenger-detail-value">
+
+                                    ${escapeHtml(gender)}
+
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="baggage-card">
+
+                            <div class="baggage-title">
+
+                                🧳 Baggage Details
+
+                            </div>
+
+
+                            <div class="baggage-info">
+
+                                <span>
+                                    <strong>Type:</strong>
+                                    ${escapeHtml(bagType)}
+                                </span>
+
+
+                                <span>
+                                    <strong>Weight:</strong>
+                                    ${escapeHtml(bagWeight)} KG
+                                </span>
+
+
+                                <span>
+                                    <strong>Price:</strong>
+                                    ₹${formatMoney(bagPrice)}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }
+    );
+
+
+    // =================================================
+    // RENDER COMPLETE TICKET
+    // =================================================
+
+    ticketContainer.innerHTML = `
+
+        <div class="ticket-header">
+
+            <h2>
+                🎫 SkyBook Flight Ticket
+            </h2>
+
+            <div class="ticket-number">
+
+                Ticket:
+                ${escapeHtml(ticketNumber)}
+
+            </div>
+
+        </div>
+
+
+        <div class="ticket-body">
+
+
+            <!-- ================= FLIGHT ================= -->
+
+            <h3 class="details-title">
+                ✈️ Flight Details
+            </h3>
+
+
+            <div class="details-grid">
+
+
+                <div class="detail-box">
+
+                    <div class="detail-label">
+                        Booking ID
+                    </div>
+
+                    <div class="detail-value">
+
+                        ${escapeHtml(ticketBookingId)}
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <div class="detail-label">
+                        Flight Number
+                    </div>
+
+                    <div class="detail-value">
+
+                        ${escapeHtml(flightNumber)}
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <div class="detail-label">
+                        Airline
+                    </div>
+
+                    <div class="detail-value">
+
+                        ✈️ ${escapeHtml(airline)}
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <div class="detail-label">
+                        Date
+                    </div>
+
+                    <div class="detail-value">
+
+                        ${escapeHtml(flightDate)}
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <div class="detail-label">
+                        Departure
+                    </div>
+
+                    <div class="detail-value">
+
+                        ${escapeHtml(departure)}
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <div class="detail-label">
+                        Arrival
+                    </div>
+
+                    <div class="detail-value">
+
+                        ${escapeHtml(arrival)}
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <div class="detail-label">
+                        Number of Passengers
+                    </div>
+
+                    <div class="detail-value">
+
+                        ${passengerCount}
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <div class="detail-label">
+                        Selected Seats
+                    </div>
+
+                    <div class="detail-value">
+
+                        💺
+                        ${escapeHtml(
+                            seatNumbers.join(", ")
+                        )}
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- ================= ROUTE ================= -->
+
+            <div class="route-box">
+
+                <div class="route">
+
+                    ${escapeHtml(source)}
+
+                    <span class="route-arrow">
+                        ✈️ →
+                    </span>
+
+                    ${escapeHtml(destination)}
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= PASSENGERS ================= -->
+
+            <div class="passenger-section">
+
+                <h3 class="details-title">
+
+                    👥 Passenger Details
+
+                </h3>
+
+                ${passengerHtml}
+
+            </div>
+
+
+            <!-- ================= PAYMENT ================= -->
+
+            <div class="price-section">
+
+                <h3 class="details-title">
+
+                    💰 Payment Details
+
+                </h3>
+
+
+                <div class="price-row">
+
+                    <span>
+
+                        Flight Fare
+                        (${passengerCount} passenger${passengerCount > 1 ? "s" : ""})
+
+                    </span>
+
+                    <strong>
+
+                        ₹${formatMoney(flightFare)}
+
+                    </strong>
+
+                </div>
+
+
+                <div class="price-row">
+
+                    <span>
+                        🧳 Total Baggage
+                    </span>
+
+                    <strong>
+
+                        ₹${formatMoney(baggageTotal)}
+
+                    </strong>
+
+                </div>
+
+
+                <div class="price-row total">
+
+                    <span>
+                        Total Paid
+                    </span>
+
+                    <strong>
+
+                        ₹${formatMoney(total)}
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= PAYMENT STATUS ================= -->
+
+            <div class="payment-status">
+
+                <div>
+                    💳 Payment Status
+                </div>
+
+
+                <strong>
+
+                    ${escapeHtml(
+                        paymentStatus
+                    )}
+
+                    ✅
+
+                </strong>
+
+
+                ${
+                    paymentId
+                    ? `
+
+                        <div
+                            style="margin-top:8px;"
+                        >
+
+                            Payment ID:
+
+                            <strong>
+
+                                ${escapeHtml(
+                                    paymentId
+                                )}
+
+                            </strong>
+
+                        </div>
+
+                    `
+                    : ""
+                }
+
+
+                ${
+                    transactionId
+                    ? `
+
+                        <div
+                            style="margin-top:8px;"
+                        >
+
+                            Braintree Transaction ID:
+
+                            <strong>
+
+                                ${escapeHtml(
+                                    transactionId
+                                )}
+
+                            </strong>
+
+                        </div>
+
+                    `
+                    : ""
+                }
+
+            </div>
+
+
+        </div>
+
+    `;
+
+}
+
+
+// =====================================================
+// START
+// =====================================================
+
+loadTicket();
+
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,380 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f5f7fb;
+    background-image: "/static/image/flight-bg.jpeg";
+    color: #172033;
+}
+
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar {
+    height: 75px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 7%;
+
+    background: #0757c9;
+
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.15);
+
+    position: relative;
+    z-index: 10;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: bold;
+    color: white;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.nav-button {
+    background: white;
+    color: #0757c9 !important;
+    padding: 11px 22px;
+    border-radius: 10px;
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.hero {
+    min-height: 600px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 80px 10%;
+
+    position: relative;
+
+    background-image:
+        linear-gradient(
+            rgba(0, 35, 80, 0.55),
+            rgba(0, 35, 80, 0.55)
+        ),
+        url("/static/image/flight-bg.jpeg");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+
+/* HERO CONTENT */
+
+.hero-content {
+    max-width: 650px;
+
+    position: relative;
+
+    z-index: 2;
+}
+
+
+/* SMALL TITLE */
+
+.small-title {
+    color: #bfdbfe;
+
+    font-weight: bold;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 20px;
+}
+
+
+/* MAIN HEADING */
+
+.hero h1 {
+    font-size: 68px;
+    line-height: 1.05;
+    margin-bottom: 25px;
+    color: white;
+}
+
+.hero h1 span {
+    color: #60a5fa;
+}
+
+.small-title {
+    color: #bfdbfe;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+}
+
+.hero-text {
+    font-size: 19px;
+    line-height: 1.7;
+    color: white;
+    margin-bottom: 35px;
+}
+
+
+/* =========================
+   PRIMARY BUTTON
+========================= */
+
+.primary-button {
+    display: inline-block;
+    text-decoration: none;
+
+    background: #2563eb;
+    color: white;
+
+    padding: 16px 30px;
+    border-radius: 12px;
+
+    font-weight: bold;
+
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35);
+
+    transition: 0.3s;
+}
+
+.primary-button:hover {
+    background: #1d4ed8;
+    transform: translateY(-3px);
+}
+
+
+/* =========================
+   FEATURES
+========================= */
+
+.features {
+    padding: 80px 8%;
+
+    text-align: center;
+
+    background: white;
+}
+
+
+.features h2 {
+    font-size: 38px;
+
+    margin-bottom: 45px;
+
+    color: #172033;
+}
+
+
+/* FEATURE GRID */
+
+.feature-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 25px;
+}
+
+
+/* FEATURE CARD */
+
+.feature-card {
+    padding: 35px 25px;
+
+    border-radius: 18px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e5e7eb;
+
+    transition: 0.3s;
+}
+
+
+.feature-card:hover {
+    transform: translateY(-8px);
+
+    border-color: #2563eb;
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.08);
+}
+
+
+/* ICON */
+
+.icon {
+    font-size: 40px;
+
+    margin-bottom: 18px;
+
+    color: #2563eb;
+}
+
+
+/* FEATURE TITLE */
+
+.feature-card h3 {
+    margin-bottom: 12px;
+
+    font-size: 20px;
+
+    color: #172033;
+}
+
+
+/* FEATURE DESCRIPTION */
+
+.feature-card p {
+    color: #667085;
+
+    line-height: 1.6;
+}
+
+
+/* =========================
+   BLUE BUTTONS - ALL TYPES
+========================= */
+
+button,
+.btn,
+.search-button,
+.continue-button,
+.pay-button,
+.login-button {
+    background: #2563eb;
+
+    color: white;
+
+    border: none;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+
+button:hover,
+.btn:hover,
+.search-button:hover,
+.continue-button:hover,
+.pay-button:hover,
+.login-button:hover {
+    background: #1d4ed8;
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================
+   SEARCH BOX
+========================= */
+
+.search-box {
+    background: white;
+
+    padding: 25px;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width: 900px) {
+
+    .feature-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .hero h1 {
+        font-size: 50px;
+    }
+
+    .navbar {
+        padding: 0 5%;
+    }
+
+}
+
+
+@media(max-width: 600px) {
+
+    .navbar {
+        height: auto;
+
+        padding: 18px 5%;
+
+        flex-direction: column;
+
+        gap: 15px;
+    }
+
+
+    .nav-links {
+        gap: 10px;
+
+        flex-wrap: wrap;
+
+        justify-content: center;
+    }
+
+
+    .nav-links a {
+        font-size: 13px;
+    }
+
+
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .hero {
+        min-height: 550px;
+
+        padding: 60px 7%;
+
+        text-align: center;
+    }
+
+
+    .hero h1 {
+        font-size: 42px;
+    }
+
+
+    .hero-text {
+        font-size: 16px;
+    }
+
+
+    .primary-button {
+        padding: 14px 25px;
+    }
+
+}

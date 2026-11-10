@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Baggage - SkyBook</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #172033;
+            
+            background-image:
+            linear-gradient(
+            rgba(4, 35, 75, 0.45),
+            rgba(4, 35, 75, 0.45)
+            ),
+            url("/static/image/baggage.jpeg");
+            
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+            height: 90px;
+            background: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 35px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #172033;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .nav-links a:hover {
+            color: #2563eb;
+        }
+
+        /* =========================
+           PAGE
+        ========================= */
+
+        .page {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 0 20px 60px;
+        }
+
+        .page-title {
+            font-size: 42px;
+            margin-bottom: 8px;
+            color: white;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #2a3141;
+            font-size: 18px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* =========================
+           CARD
+        ========================= */
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+            margin-bottom: 25px;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+
+        /* =========================
+           FLIGHT SUMMARY
+        ========================= */
+
+        .flight-summary {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .flight-summary div {
+            font-size: 17px;
+        }
+
+        .flight-summary strong {
+            color: #2563eb;
+        }
+
+        /* =========================
+           PASSENGER BAGGAGE
+        ========================= */
+
+        .passenger-baggage-card {
+            border: 2px solid #e5e7eb;
+            border-radius: 18px;
+            padding: 25px;
+            margin-bottom: 22px;
+            transition: 0.2s;
+        }
+
+        .passenger-baggage-card:hover {
+            border-color: #bfdbfe;
+            box-shadow: 0 5px 18px rgba(37, 99, 235, 0.08);
+        }
+
+        .passenger-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 22px;
+        }
+
+        .passenger-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #172033;
+        }
+
+        .seat-badge {
+            background: #eff6ff;
+            color: #2563eb;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .passenger-name {
+            color: #667085;
+            font-size: 15px;
+            margin-top: 5px;
+        }
+
+        /* =========================
+           BAGGAGE OPTIONS
+        ========================= */
+
+        .baggage-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .baggage-option {
+            border: 2px solid #e5e7eb;
+            padding: 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+            background: white;
+            position: relative;
+        }
+
+        .baggage-option:hover {
+            border-color: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.10);
+        }
+
+        .baggage-option.selected {
+            border-color: #2563eb;
+            background: #eff6ff;
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.15);
+        }
+
+        .baggage-option.selected::after {
+            content: "✓";
+            position: absolute;
+            right: 12px;
+            top: 12px;
+            width: 25px;
+            height: 25px;
+            background: #2563eb;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .baggage-option h3 {
+            margin: 0 0 8px;
+            font-size: 19px;
+        }
+
+        .baggage-option p {
+            font-size: 14px;
+            margin: 7px 0;
+            color: #667085;
+        }
+
+        .price {
+            color: #2563eb;
+            font-size: 19px;
+            font-weight: bold;
+            margin-top: 12px;
+        }
+
+        /* =========================
+           TOTAL
+        ========================= */
+
+        .total-card {
+            background: #eff6ff;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .total-label {
+            font-size: 18px;
+            font-weight: bold;
+            color: #172033;
+        }
+
+        .total-amount {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        /* =========================
+           CONTINUE
+        ========================= */
+
+        .continue-section {
+            text-align: center;
+            margin-top: 35px;
+        }
+
+        .continue-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 15px 45px;
+            min-width: 280px;
+            border-radius: 10px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .continue-btn:hover:not(:disabled) {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.25);
+        }
+
+        .continue-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        /* =========================
+           MESSAGE
+        ========================= */
+
+        .error-box {
+            background: #fff1f2;
+            border: 1px solid #fecdd3;
+            color: #be123c;
+            padding: 20px;
+            border-radius: 12px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .success-box {
+            background: #ecfdf3;
+            border: 1px solid #a7f3d0;
+            color: #047857;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .info-box {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #1d4ed8;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            font-size: 17px;
+            color: #667085;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            .baggage-options {
+                grid-template-columns: 1fr;
+            }
+
+            .navbar {
+                padding: 0 20px;
+            }
+
+            .nav-links {
+                gap: 15px;
+            }
+
+            .nav-links a {
+                font-size: 14px;
+            }
+
+            .logo {
+                font-size: 24px;
+            }
+
+            .page-title {
+                font-size: 32px;
+            }
+
+            .flight-summary {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .total-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .passenger-baggage-card {
+                padding: 20px;
+            }
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        ✈️ SkyBook
+    </div>
+
+</nav>
+
+
+<div class="page">
+
+    <!-- =========================
+         PAGE TITLE
+    ========================= -->
+
+    <h1 class="page-title">
+        Select Baggage
+    </h1>
+
+    <p class="subtitle">
+        Choose baggage for each passenger.
+    </p>
+
+
+    <!-- =========================
+         FLIGHT INFORMATION
+    ========================= -->
+
+    <div class="card">
+
+        <h2>
+            ✈️ Booking Information
+        </h2>
+
+        <div id="flightSummary" class="flight-summary">
+
+            <div class="loading">
+                ✈️ Loading flight information...
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         INFO
+    ========================= -->
+
+    <div class="info-box">
+
+        🧳 <strong>Baggage Selection:</strong>
+        Select one baggage option for each passenger.
+
+        <br>
+
+        You have selected
+        <strong id="passengerCount">0</strong>
+        passenger(s).
+
+    </div>
+
+
+    <!-- =========================
+         BAGGAGE
+    ========================= -->
+
+    <div class="card">
+
+        <h2>
+            🧳 Choose Baggage
+        </h2>
+
+        <div id="baggageContainer">
+
+            <div class="loading">
+                🧳 Loading baggage options...
+            </div>
+
+        </div>
+
+
+        <!-- TOTAL -->
+
+        <div class="total-card">
+
+            <div class="total-label">
+                Total Baggage Price
+            </div>
+
+            <div
+                id="totalAmount"
+                class="total-amount"
+            >
+                ₹0
+            </div>
+
+        </div>
+
+
+        <div id="message"></div>
+
+
+        <!-- CONTINUE -->
+
+        <div class="continue-section">
+
+            <button
+                id="continueBtn"
+                class="continue-btn"
+                type="button"
+                disabled
+            >
+                Continue to Payment
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    // =====================================================
+    // CONFIGURATION
+    // =====================================================
+
+    const FLIGHT_SERVICE_URL =
+        "http://localhost:5001";
+
+    const BAGGAGE_SERVICE_URL =
+        "http://localhost:5003";
+
+
+    // =====================================================
+    // LOCAL STORAGE
+    // =====================================================
+
+    const flightId =
+        localStorage.getItem("flightId");
+
+    const selectedSeatsJSON =
+        localStorage.getItem("selectedSeats");
+
+    const passengersJSON =
+        localStorage.getItem("passengers");
+
+
+    // =====================================================
+    // VARIABLES
+    // =====================================================
+
+    let selectedSeats = [];
+
+    let passengers = [];
+
+    let baggageOptions = [];
+
+    let passengerBaggage = {};
+
+
+    const continueBtn =
+        document.getElementById("continueBtn");
+
+    const message =
+        document.getElementById("message");
+
+
+    // =====================================================
+    // LOAD SELECTED SEATS
+    // =====================================================
+
+    function loadSelectedSeats() {
+
+        if (!selectedSeatsJSON) {
+
+            showError(
+                "No seats selected. Please go back to the seat selection page."
+            );
+
+            return false;
+        }
+
+
+        try {
+
+            selectedSeats =
+                JSON.parse(selectedSeatsJSON);
+
+        } catch (error) {
+
+            console.error(
+                "Selected seats parsing error:",
+                error
+            );
+
+            showError(
+                "Invalid selected seat information."
+            );
+
+            return false;
+        }
+
+
+        if (!Array.isArray(selectedSeats)) {
+
+            showError(
+                "Invalid seat selection."
+            );
+
+            return false;
+        }
+
+
+        if (
+            selectedSeats.length < 1 ||
+            selectedSeats.length > 4
+        ) {
+
+            showError(
+                "You can book between 1 and 4 passengers."
+            );
+
+            return false;
+        }
+
+
+        return true;
+    }
+
+
+    // =====================================================
+    // LOAD PASSENGERS
+    // =====================================================
+
+    function loadPassengers() {
+
+        if (!passengersJSON) {
+
+            showError(
+                "Passenger information not found. Please enter passenger details first."
+            );
+
+            return false;
+        }
+
+
+        try {
+
+            passengers =
+                JSON.parse(passengersJSON);
+
+        } catch (error) {
+
+            console.error(
+                "Passenger parsing error:",
+                error
+            );
+
+            showError(
+                "Invalid passenger information."
+            );
+
+            return false;
+        }
+
+
+        if (!Array.isArray(passengers)) {
+
+            showError(
+                "Invalid passenger information."
+            );
+
+            return false;
+        }
+
+
+        if (
+            passengers.length !==
+            selectedSeats.length
+        ) {
+
+            showError(
+                "Passenger and seat information do not match."
+            );
+
+            return false;
+        }
+
+
+        return true;
+    }
+
+
+    // =====================================================
+    // ERROR
+    // =====================================================
+
+    function showError(text) {
+
+        message.innerHTML = `
+            <div class="error-box">
+                ⚠️ ${text}
+            </div>
+        `;
+
+        continueBtn.disabled = true;
+    }
+
+
+    // =====================================================
+    // SUCCESS
+    // =====================================================
+
+    function showSuccess(text) {
+
+        message.innerHTML = `
+            <div class="success-box">
+                ✅ ${text}
+            </div>
+        `;
+    }
+
+
+    // =====================================================
+    // LOAD FLIGHT
+    // =====================================================
+
+    async function loadFlightInfo() {
+
+        const container =
+            document.getElementById(
+                "flightSummary"
+            );
+
+
+        if (!flightId) {
+
+            container.innerHTML = `
+                <div class="error-box">
+                    ⚠️ Flight ID not found.
+                    <br><br>
+                    Please go back to Flights and select a flight.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        try {
+
+            const response = await fetch(
+                `${FLIGHT_SERVICE_URL}/flights/${encodeURIComponent(flightId)}`
+            );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    `Flight Service returned ${response.status}`
+                );
+            }
+
+
+            const result =
+                await response.json();
+
+
+            console.log(
+                "Flight result:",
+                result
+            );
+
+
+            const flight =
+                result.flight || result;
+
+
+            if (!flight) {
+
+                throw new Error(
+                    "Flight information not found"
+                );
+            }
+
+
+            container.innerHTML = `
+
+                <div>
+                    <strong>Flight</strong>
+                    <br>
+                    ${flight.flight_number || "N/A"}
+                </div>
+
+                <div>
+                    <strong>Route</strong>
+                    <br>
+                    ${flight.source || "N/A"}
+                    →
+                    ${flight.destination || "N/A"}
+                </div>
+
+                <div>
+                    <strong>Date</strong>
+                    <br>
+                    ${flight.date || "N/A"}
+                </div>
+
+                <div>
+                    <strong>Passengers</strong>
+                    <br>
+                    ${selectedSeats.length}
+                </div>
+
+            `;
+
+        } catch (error) {
+
+            console.error(
+                "Flight information error:",
+                error
+            );
+
+
+            container.innerHTML = `
+
+                <div class="error-box">
+
+                    ⚠️ Unable to load flight information.
+
+                    <br><br>
+
+                    ${error.message}
+
+                    <br><br>
+
+                    Make sure Flight Service is running
+                    on port 5001.
+
+                </div>
+
+            `;
+        }
+    }
+
+
+    // =====================================================
+    // LOAD BAGGAGE OPTIONS
+    // =====================================================
+
+    async function loadBaggageOptions() {
+
+        const container =
+            document.getElementById(
+                "baggageContainer"
+            );
+
+
+        try {
+
+            const response = await fetch(
+                `${BAGGAGE_SERVICE_URL}/baggage/options`
+            );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    `Baggage Service returned ${response.status}`
+                );
+            }
+
+
+            const result =
+                await response.json();
+
+
+            console.log(
+                "Baggage options:",
+                result
+            );
+
+
+            let options = result;
+
+
+            if (result.options) {
+                options = result.options;
+            }
+
+
+            if (result.data) {
+                options = result.data;
+            }
+
+
+            if (!Array.isArray(options)) {
+
+                throw new Error(
+                    "Invalid baggage options received"
+                );
+            }
+
+
+            baggageOptions = options;
+
+
+            renderPassengerBaggage();
+
+        } catch (error) {
+
+            console.error(
+                "Baggage options error:",
+                error
+            );
+
+
+            container.innerHTML = `
+
+                <div class="error-box">
+
+                    ⚠️ Unable to load baggage options.
+
+                    <br><br>
+
+                    ${error.message}
+
+                    <br><br>
+
+                    Make sure Baggage Service is running
+                    on port 5003.
+
+                </div>
+
+            `;
+        }
+    }
+
+
+    // =====================================================
+    // RENDER PASSENGER BAGGAGE
+    // =====================================================
+
+    function renderPassengerBaggage() {
+
+        const container =
+            document.getElementById(
+                "baggageContainer"
+            );
+
+
+        container.innerHTML = "";
+
+
+        passengers.forEach(
+            (passenger, index) => {
+
+                const seat =
+                    selectedSeats[index];
+
+
+                const card =
+                    document.createElement("div");
+
+
+                card.className =
+                    "passenger-baggage-card";
+
+
+                const header =
+                    document.createElement("div");
+
+
+                header.className =
+                    "passenger-header";
+
+
+                header.innerHTML = `
+
+                    <div>
+
+                        <div class="passenger-title">
+
+                            Passenger ${index + 1}
+
+                        </div>
+
+                        <div class="passenger-name">
+
+                            ${escapeHTML(passenger.name)}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="seat-badge">
+
+                        💺 Seat ${escapeHTML(seat)}
+
+                    </div>
+
+                `;
+
+
+                card.appendChild(header);
+
+
+                const optionsContainer =
+                    document.createElement("div");
+
+
+                optionsContainer.className =
+                    "baggage-options";
+
+
+                baggageOptions.forEach(
+                    (option, optionIndex) => {
+
+                        const optionCard =
+                            document.createElement("div");
+
+
+                        optionCard.className =
+                            "baggage-option";
+
+
+                        optionCard.dataset.passenger =
+                            index;
+
+                        optionCard.dataset.option =
+                            optionIndex;
+
+
+                        const type =
+                            option.type ||
+                            "Baggage";
+
+
+                        const weight =
+                            Number(
+                                option.weight || 0
+                            );
+
+
+                        const price =
+                            Number(
+                                option.price || 0
+                            );
+
+
+                        optionCard.innerHTML = `
+
+                            <h3>
+                                🧳 ${escapeHTML(type)}
+                            </h3>
+
+                            <p>
+                                Weight:
+                                <strong>
+                                    ${weight} KG
+                                </strong>
+                            </p>
+
+                            <div class="price">
+                                ₹${price.toLocaleString("en-IN")}
+                            </div>
+
+                        `;
+
+
+                        optionCard.addEventListener(
+                            "click",
+                            () => {
+
+                                selectPassengerBaggage(
+                                    index,
+                                    option,
+                                    optionCard
+                                );
+
+                            }
+                        );
+
+
+                        optionsContainer.appendChild(
+                            optionCard
+                        );
+
+                    }
+                );
+
+
+                card.appendChild(
+                    optionsContainer
+                );
+
+
+                container.appendChild(card);
+
+            }
+        );
+
+
+        updateTotal();
+
+    }
+
+
+    // =====================================================
+    // SELECT BAGGAGE FOR PASSENGER
+    // =====================================================
+
+    function selectPassengerBaggage(
+        passengerIndex,
+        option,
+        card
+    ) {
+
+        const parent =
+            card.parentElement;
+
+
+        parent
+            .querySelectorAll(
+                ".baggage-option"
+            )
+            .forEach(item => {
+
+                item.classList.remove(
+                    "selected"
+                );
+
+            });
+
+
+        card.classList.add(
+            "selected"
+        );
+
+
+        passengerBaggage[
+            passengerIndex
+        ] = {
+
+            passenger_number:
+                passengerIndex + 1,
+
+            seat_number:
+                String(
+                    selectedSeats[
+                        passengerIndex
+                    ]
+                ),
+
+            passenger_name:
+                passengers[
+                    passengerIndex
+                ].name,
+
+            baggage_type:
+                String(
+                    option.type ||
+                    "Baggage"
+                ),
+
+            weight:
+                Number(
+                    option.weight || 0
+                ),
+
+            price:
+                Number(
+                    option.price || 0
+                )
+
+        };
+
+
+        console.log(
+            "Passenger baggage:",
+            passengerBaggage
+        );
+
+
+        updateTotal();
+
+    }
+
+
+    // =====================================================
+    // UPDATE TOTAL
+    // =====================================================
+
+    function updateTotal() {
+
+        let total = 0;
+
+
+        Object.values(
+            passengerBaggage
+        ).forEach(
+            item => {
+
+                total +=
+                    Number(
+                        item.price || 0
+                    );
+
+            }
+        );
+
+
+        document.getElementById(
+            "totalAmount"
+        ).textContent =
+            `₹${total.toLocaleString("en-IN")}`;
+
+
+        /*
+         * Continue only when every passenger
+         * has selected baggage.
+         */
+
+        const allSelected =
+            Object.keys(
+                passengerBaggage
+            ).length ===
+            passengers.length;
+
+
+        continueBtn.disabled =
+            !allSelected;
+
+
+        if (allSelected) {
+
+            continueBtn.textContent =
+                "Continue to Payment →";
+
+        } else {
+
+            continueBtn.textContent =
+                "Select Baggage for All Passengers";
+
+        }
+
+    }
+
+
+    // =====================================================
+    // SAVE BAGGAGE
+    // =====================================================
+
+    async function continueToPayment() {
+
+        const allSelected =
+            Object.keys(
+                passengerBaggage
+            ).length ===
+            passengers.length;
+
+
+        if (!allSelected) {
+
+            alert(
+                "Please select baggage for every passenger."
+            );
+
+            return;
+        }
+
+
+        continueBtn.disabled = true;
+
+        continueBtn.textContent =
+            "Saving Baggage...";
+
+
+        message.innerHTML = "";
+
+
+        try {
+
+            const savedBaggage = [];
+
+
+            /*
+             * Send baggage for every passenger
+             */
+
+            for (
+                let i = 0;
+                i < passengers.length;
+                i++
+            ) {
+
+                const item =
+                    passengerBaggage[i];
+
+
+                const baggageData = {
+
+                    flight_id:
+                        String(flightId),
+
+                    seat_number:
+                        String(
+                            item.seat_number
+                        ),
+
+                    passenger_name:
+                        String(
+                            item.passenger_name
+                        ),
+
+                    baggage_type:
+                        String(
+                            item.baggage_type
+                        ),
+
+                    weight:
+                        Number(
+                            item.weight
+                        ),
+
+                    price:
+                        Number(
+                            item.price
+                        )
+
+                };
+
+
+                console.log(
+                    `Sending baggage for passenger ${i + 1}:`,
+                    baggageData
+                );
+
+
+                const response =
+                    await fetch(
+                        `${BAGGAGE_SERVICE_URL}/baggage`,
+                        {
+
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    baggageData
+                                )
+
+                        }
+                    );
+
+
+                const result =
+                    await response.json();
+
+
+                console.log(
+                    `Baggage response ${i + 1}:`,
+                    result
+                );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        result.error ||
+                        result.message ||
+                        `Baggage booking failed for Passenger ${i + 1}`
+                    );
+
+                }
+
+
+                savedBaggage.push({
+
+                    passenger_number:
+                        i + 1,
+
+                    passenger_name:
+                        item.passenger_name,
+
+                    seat_number:
+                        item.seat_number,
+
+                    baggage_id:
+                        result.baggage_id ||
+                        result.id ||
+                        "",
+
+                    baggage_type:
+                        item.baggage_type,
+
+                    weight:
+                        item.weight,
+
+                    price:
+                        item.price
+
+                });
+
+            }
+
+
+            // =================================================
+            // CALCULATE TOTAL
+            // =================================================
+
+            const totalBaggagePrice =
+                savedBaggage.reduce(
+                    (
+                        total,
+                        item
+                    ) =>
+                        total +
+                        Number(
+                            item.price || 0
+                        ),
+                    0
+                );
+
+
+            // =================================================
+            // SAVE ALL BAGGAGE DATA
+            // =================================================
+
+            localStorage.setItem(
+                "passengerBaggage",
+                JSON.stringify(
+                    savedBaggage
+                )
+            );
+
+
+            localStorage.setItem(
+                "baggagePrice",
+                String(
+                    totalBaggagePrice
+                )
+            );
+
+
+            localStorage.setItem(
+                "baggageTotal",
+                String(
+                    totalBaggagePrice
+                )
+            );
+
+
+            // =================================================
+            // BACKWARD COMPATIBILITY
+            // =================================================
+
+            if (savedBaggage.length > 0) {
+
+                localStorage.setItem(
+                    "baggageId",
+                    String(
+                        savedBaggage[0]
+                            .baggage_id || ""
+                    )
+                );
+
+
+                localStorage.setItem(
+                    "baggageType",
+                    String(
+                        savedBaggage[0]
+                            .baggage_type
+                    )
+                );
+
+
+                localStorage.setItem(
+                    "baggageWeight",
+                    String(
+                        savedBaggage[0]
+                            .weight
+                    )
+                );
+
+            }
+
+
+            // =================================================
+            // CLEAR OLD PAYMENT/TICKET DATA
+            // =================================================
+
+            localStorage.removeItem(
+                "bookingId"
+            );
+
+            localStorage.removeItem(
+                "paymentId"
+            );
+
+            localStorage.removeItem(
+                "paymentStatus"
+            );
+
+            localStorage.removeItem(
+                "paymentAmount"
+            );
+
+            localStorage.removeItem(
+                "ticketNumber"
+            );
+
+
+            // =================================================
+            // SUCCESS
+            // =================================================
+
+            showSuccess(
+                "Baggage saved successfully. Opening Payment..."
+            );
+
+
+            continueBtn.textContent =
+                "Opening Payment...";
+
+
+            // =================================================
+            // GO TO PAYMENT
+            // =================================================
+
+            setTimeout(
+                () => {
+
+                    window.location.href =
+                        "payment.html";
+
+                },
+                700
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Baggage save error:",
+                error
+            );
+
+
+            message.innerHTML = `
+
+                <div class="error-box">
+
+                    ⚠️ Unable to save baggage.
+
+                    <br><br>
+
+                    ${escapeHTML(
+                        error.message
+                    )}
+
+                </div>
+
+            `;
+
+
+            continueBtn.disabled =
+                false;
+
+
+            continueBtn.textContent =
+                "Continue to Payment →";
+
+        }
+
+    }
+
+
+    // =====================================================
+    // ESCAPE HTML
+    // =====================================================
+
+    function escapeHTML(value) {
+
+        return String(value)
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+            .replace(
+                /</g,
+                "&lt;"
+            )
+            .replace(
+                />/g,
+                "&gt;"
+            )
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+            .replace(
+                /'/g,
+                "&#039;"
+            );
+
+    }
+
+
+    // =====================================================
+    // INITIALIZE
+    // =====================================================
+
+    async function initializePage() {
+
+        console.log(
+            "================================="
+        );
+
+        console.log(
+            "BAGGAGE PAGE STARTED"
+        );
+
+        console.log(
+            "Flight ID:",
+            flightId
+        );
+
+        console.log(
+            "Selected Seats:",
+            selectedSeatsJSON
+        );
+
+        console.log(
+            "Passengers:",
+            passengersJSON
+        );
+
+        console.log(
+            "================================="
+        );
+
+
+        if (!flightId) {
+
+            showError(
+                "Flight ID is missing."
+            );
+
+            return;
+        }
+
+
+        if (!loadSelectedSeats()) {
+
+            return;
+        }
+
+
+        if (!loadPassengers()) {
+
+            return;
+        }
+
+
+        document.getElementById(
+            "passengerCount"
+        ).textContent =
+            passengers.length;
+
+
+        await loadFlightInfo();
+
+        await loadBaggageOptions();
+
+    }
+
+
+    // =====================================================
+    // START
+    // =====================================================
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        initializePage
+    );
+
+
+    continueBtn.addEventListener(
+        "click",
+        continueToPayment
+    );
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Register - SkyBook</title>
+
+    <link rel="stylesheet"
+          href="css/style.css">
+
+    <style>
+
+        /* =========================
+           REGISTER PAGE
+        ========================= */
+
+        .auth-page {
+
+            min-height: calc(100vh - 75px);
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            padding: 50px 20px;
+
+            position: relative;
+
+            /* AIRPLANE BACKGROUND */
+
+            background-image:
+                linear-gradient(
+                    rgba(3, 35, 75, 0.55),
+                    rgba(3, 35, 75, 0.55)
+                ),
+                url("/static/image/flight-bg.jpeg");
+
+            background-size: cover;
+
+            background-position: center;
+
+            background-repeat: no-repeat;
+
+            background-attachment: fixed;
+        }
+
+
+        /* =========================
+           REGISTER CARD
+        ========================= */
+
+        .auth-card {
+
+            width: 450px;
+
+            background: rgba(255, 255, 255, 0.96);
+
+            padding: 40px;
+
+            border-radius: 22px;
+
+            box-shadow:
+                0 20px 60px
+                rgba(0, 0, 0, 0.30);
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+
+        /* =========================
+           ICON
+        ========================= */
+
+        .auth-icon {
+
+            width: 65px;
+
+            height: 65px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            margin: 0 auto 20px;
+
+            border-radius: 18px;
+
+            background: #eaf2ff;
+
+            font-size: 32px;
+        }
+
+
+        /* =========================
+           HEADING
+        ========================= */
+
+        .auth-card h1 {
+
+            text-align: center;
+
+            margin-bottom: 10px;
+
+            font-size: 30px;
+
+            color: #172033;
+        }
+
+
+        .auth-subtitle {
+
+            text-align: center;
+
+            color: #667085;
+
+            margin-bottom: 30px;
+
+            line-height: 1.5;
+        }
+
+
+        /* =========================
+           FORM
+        ========================= */
+
+        .form-group {
+
+            margin-bottom: 20px;
+        }
+
+
+        .form-group label {
+
+            display: block;
+
+            margin-bottom: 8px;
+
+            font-weight: 600;
+
+            color: #344054;
+        }
+
+
+        .form-group input {
+
+            width: 100%;
+
+            padding: 14px 15px;
+
+            border: 1px solid #d0d5dd;
+
+            border-radius: 10px;
+
+            outline: none;
+
+            font-size: 15px;
+
+            transition: 0.2s;
+        }
+
+
+        .form-group input:focus {
+
+            border-color: #2563eb;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(37, 99, 235, 0.10);
+        }
+
+
+        /* =========================
+           REGISTER BUTTON
+        ========================= */
+
+        .auth-button {
+
+            width: 100%;
+
+            border: none;
+
+            cursor: pointer;
+
+            font-size: 16px;
+
+            background: #2563eb;
+
+            color: white;
+
+            padding: 14px;
+
+            border-radius: 10px;
+
+            font-weight: bold;
+
+            transition: 0.3s;
+        }
+
+
+        .auth-button:hover {
+
+            background: #1d4ed8;
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 8px 20px
+                rgba(37, 99, 235, 0.30);
+        }
+
+
+        /* =========================
+           MESSAGE
+        ========================= */
+
+        .message {
+
+            display: none;
+
+            padding: 12px;
+
+            border-radius: 10px;
+
+            margin-bottom: 20px;
+
+            text-align: center;
+
+            font-size: 14px;
+        }
+
+
+        .message.success {
+
+            display: block;
+
+            background: #ecfdf3;
+
+            color: #027a48;
+        }
+
+
+        .message.error {
+
+            display: block;
+
+            background: #fef3f2;
+
+            color: #b42318;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .auth-footer {
+
+            text-align: center;
+
+            margin-top: 25px;
+
+            color: #667085;
+        }
+
+
+        .auth-footer a {
+
+            color: #2563eb;
+
+            font-weight: 600;
+
+            text-decoration: none;
+        }
+
+
+        .auth-footer a:hover {
+
+            text-decoration: underline;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 600px) {
+
+            .auth-page {
+
+                min-height: calc(100vh - 65px);
+
+                padding: 30px 15px;
+
+                background-position: center;
+            }
+
+
+            .auth-card {
+
+                width: 100%;
+
+                max-width: 420px;
+
+                padding: 30px 25px;
+
+                border-radius: 18px;
+            }
+
+
+            .auth-card h1 {
+
+                font-size: 26px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        ✈️ SkyBook
+
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="index.html"
+           class="nav-button">
+
+            Home
+
+        </a>
+
+
+        <a href="flights.html"
+           class="nav-button">
+
+            Flights
+
+        </a>
+
+
+        <a href="login.html"
+           class="nav-button">
+
+            Login
+
+        </a>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =========================
+     REGISTER
+========================= -->
+
+<section class="auth-page">
+
+    <div class="auth-card">
+
+
+        <div class="auth-icon">
+
+            ✈️
+
+        </div>
+
+
+        <h1>
+
+            Create Account
+
+        </h1>
+
+
+        <p class="auth-subtitle">
+
+            Join SkyBook and start your journey
+
+        </p>
+
+
+        <div id="message"
+             class="message">
+
+        </div>
+
+
+        <form id="registerForm">
+
+
+            <!-- NAME -->
+
+            <div class="form-group">
+
+                <label for="name">
+
+                    Full Name
+
+                </label>
+
+
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="Enter your full name"
+                    required>
+
+            </div>
+
+
+
+            <!-- EMAIL -->
+
+            <div class="form-group">
+
+                <label for="email">
+
+                    Email Address
+
+                </label>
+
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter your email"
+                    required>
+
+            </div>
+
+
+
+            <!-- PASSWORD -->
+
+            <div class="form-group">
+
+                <label for="password">
+
+                    Password
+
+                </label>
+
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Create a password"
+                    minlength="6"
+                    required>
+
+            </div>
+
+
+
+            <!-- CONFIRM PASSWORD -->
+
+            <div class="form-group">
+
+                <label for="confirmPassword">
+
+                    Confirm Password
+
+                </label>
+
+
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    placeholder="Confirm your password"
+                    minlength="6"
+                    required>
+
+            </div>
+
+
+
+            <!-- BUTTON -->
+
+            <button
+                type="submit"
+                class="primary-button auth-button">
+
+                Create Account
+
+            </button>
+
+
+        </form>
+
+
+
+        <!-- FOOTER -->
+
+        <div class="auth-footer">
+
+            Already have an account?
+
+            <a href="login.html">
+
+                Login
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+<script>
+
+
+/* =========================
+   REGISTER FORM
+========================= */
+
+const registerForm =
+    document.getElementById(
+        "registerForm"
+    );
+
+
+const message =
+    document.getElementById(
+        "message"
+    );
+
+
+
+/* =========================
+   SUBMIT
+========================= */
+
+registerForm.addEventListener(
+
+    "submit",
+
+    async function(event) {
+
+        event.preventDefault();
+
+
+        const name =
+            document.getElementById(
+                "name"
+            ).value.trim();
+
+
+        const email =
+            document.getElementById(
+                "email"
+            ).value.trim();
+
+
+        const password =
+            document.getElementById(
+                "password"
+            ).value;
+
+
+        const confirmPassword =
+            document.getElementById(
+                "confirmPassword"
+            ).value;
+
+
+
+        /* PASSWORD CHECK */
+
+        if (password !== confirmPassword) {
+
+            showMessage(
+                "Passwords do not match.",
+                "error"
+            );
+
+            return;
+        }
+
+
+
+        try {
+
+
+            /* USER SERVICE */
+
+            const response =
+                await fetch(
+                    "http://localhost:5006/register",
+                    {
+
+                        method: "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                name: name,
+
+                                email: email,
+
+                                password: password
+
+                            })
+
+                    }
+                );
+
+
+
+            const data =
+                await response.json();
+
+
+
+            /* SUCCESS */
+
+            if (response.ok) {
+
+
+                showMessage(
+
+                    "Registration successful! Redirecting to login...",
+
+                    "success"
+
+                );
+
+
+                registerForm.reset();
+
+
+                setTimeout(
+
+                    function() {
+
+                        window.location.href =
+                            "login.html";
+
+                    },
+
+                    1500
+
+                );
+
+
+            }
+
+            /* ERROR */
+
+            else {
+
+                showMessage(
+
+                    data.error ||
+                    "Registration failed.",
+
+                    "error"
+
+                );
+
+            }
+
+
+        }
+
+        catch (error) {
+
+
+            console.error(error);
+
+
+            showMessage(
+
+                "Cannot connect to User Service. Make sure port 5006 is running.",
+
+                "error"
+
+            );
+
+        }
+
+    }
+
+);
+
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+function showMessage(text, type) {
+
+    message.textContent = text;
+
+    message.className =
+        "message " + type;
+
+}
+
+</script>
+
+
+</body>
+
+</html>
